@@ -1,0 +1,34 @@
+body {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
+
+.fakebook-logo {
+    background-color: blue;
+}
+
+.status-input {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-column-start: 2;
+}
+
+#statusInputField {
+    width: 100%;
+}
+
+#newsFeed {
+    display: grid;
+    grid-row-start: 3;
+    grid-column-start: 2 ;
+}
+
