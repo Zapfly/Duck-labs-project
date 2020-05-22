@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "jest": "^26.0.1",
+    "mocha": "*"
   },
   "author": "",
   "license": "ISC"
