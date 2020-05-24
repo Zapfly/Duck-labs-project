@@ -48,7 +48,7 @@ function addPostToPage(post) {
 }
 
 function updatePagePosts(posts) {
-  cleanOutElement('postsArea')
+  cleanOutElement('newsFeed')
   posts.forEach(function(post) {
     addPostToPage(post)
   })
@@ -71,7 +71,7 @@ function getPostFromForm() {
 function postButtonPressed() {
   let postToAdd = getPostFromForm()
   if (inputHasSomeText("statusInputField")) {
-    postPostToServerAndUpdatePage(postToAdd)
+    postPostsToServerAndUpdatePage(postToAdd)
   }
 }
 
@@ -85,7 +85,7 @@ function clearNewsFeedButtonPressed() {
 }
 
 //---- server interaction
-function postPostToServerAndUpdatePage(post) {
+function postPostsToServerAndUpdatePage(post) {
     $.ajax({
         url:'/api/v1/addPost',
         type:"POST",
@@ -109,6 +109,20 @@ function updatePostsFromServer() {
      .fail(function(error) {
         // what do we do here????
      })
+}
+
+function clearPostsFromServer() {
+  $.ajax({
+    url:'/api/v1/clear',
+    type:"POST",
+    success: function() {
+        console.log('server has been cleared')
+        updatePostsFromServer()
+      },
+    fail: function(error) {
+        // what do we do here?
+    }
+})  
 }
 
 $(document).ready(function() {
