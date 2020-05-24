@@ -56,13 +56,13 @@ function updatePagePosts(posts) {
   
 function getPostFromForm() {
   let authorName 
-  if (getInputValue('authorText') === "") {
+  if (getInputValue('statusInputField') === "") {
     authorName = 'Anonymous'
   } else {
     authorName = getInputValue('authorText')
   }
   return {
-    postText: getInputValue('postText'),
+    postText: getInputValue('statusInputField'),
     author: authorName,
     postDate: todaysDateString()
   }
@@ -70,7 +70,7 @@ function getPostFromForm() {
 
 function postButtonPressed() {
   let postToAdd = getPostFromForm()
-  if (inputHasSomeText("postText")) {
+  if (inputHasSomeText("statusInputField")) {
     postPostToServerAndUpdatePage(postToAdd)
   }
 }
@@ -80,8 +80,8 @@ function summonEntryFormButtonPressed() {
   hide('summonEntryFormButton')
 }
 
-function clearBoardButtonPressed() {
-  cleanOutElement('postsArea')
+function clearNewsFeedButtonPressed() {
+  cleanOutElement('newsFeed')
 }
 
 //---- server interaction

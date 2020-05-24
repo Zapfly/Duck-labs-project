@@ -1,7 +1,8 @@
 body {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr auto;
     grid-template-columns: 1fr 2fr 1fr;
+    background-color: #ECF3FF;
 }
 
 header {
@@ -18,13 +19,19 @@ header {
 }
 
 .fakebook-logo {
-    background-color: blue;
+    background-color: #1877F2;
 }
 
 .status-input {
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 1fr 1fr ;
+    grid-template-columns:5fr 1fr;
     grid-column-start: 2;
+    margin: 5px;
+}
+.create-status-text {
+    grid-column-start: 1;
+    grid-column-end: 3;
 }
 
 #statusInputField {
@@ -42,10 +49,12 @@ header {
     border-top: 1px solid grey;
     border-left: 1px solid grey;
     border-radius: 8px;
+    background-color: white;
+    padding: 5px;
 }
 
 .post-card {
     min-height: 2rem;
     margin: 3px;
-    padding: 5px;
+
 }
