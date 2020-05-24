@@ -43,7 +43,8 @@ function todaysDateString() {
 examplePost = { postText: "Hi, this is a test post 0", image:"", author: "Tony Enerson", postDate: "2020-05-19"}
 
 function addPostToPage(post) {
-    let postHtml = `<div class="post-card card">${post.postText}<div class="post-footer">${post.author}: ${post.postDate}</div></div>`
+  console.log(post)
+    let postHtml = `<div class="post-card card" id="${post.uid}">${post.postText}<div class="post-footer">${post.author}: ${post.postDate}</div></div>`
     appendHtml('newsFeed', postHtml)
 }
 
@@ -56,7 +57,7 @@ function updatePagePosts(posts) {
   
 function getPostFromForm() {
   let authorName 
-  if (getInputValue('statusInputField') === "") {
+  if (inputHasSomeText("statusInputField")) {
     authorName = 'Anonymous'
   } else {
     authorName = getInputValue('authorText')
@@ -64,7 +65,8 @@ function getPostFromForm() {
   return {
     postText: getInputValue('statusInputField'),
     author: authorName,
-    postDate: todaysDateString()
+    postDate: todaysDateString(),
+    uid: new Date().getTime() 
   }
 }
 
@@ -81,7 +83,7 @@ function summonEntryFormButtonPressed() {
 }
 
 function clearNewsFeedButtonPressed() {
-  cleanOutElement('newsFeed')
+  clearPostsFromServer()
 }
 
 //---- server interaction
@@ -124,6 +126,26 @@ function clearPostsFromServer() {
     }
 })  
 }
+
+function deleteFromServer(post) {
+  $.ajax({
+    url:'/api/v1/delete',
+    type:"POST",
+    data:JSON.stringify(post),
+    contentType:"application/json; charset=utf-8",
+    success: function() {
+        console.log('message has been deleted')
+
+        updatePostsFromServer()
+      },
+    fail: function(error) {
+        // what do we do here?
+    }
+})  
+}
+
+
+
 
 $(document).ready(function() {
   updatePostsFromServer()

@@ -11,18 +11,17 @@ const setupV2Routes = (apiRouter) => {
         response.send(allPosts)
     }
 
-    function addUserId(body) {
-        body.uid = new Date().getTime()
-    }
+    // function addUserId(body) {
+    //     body.uid = new Date().getTime()
+    // }
 
     function addNewPost(request, response) {
         const requestBody = request.body
-        addUserId(requestBody)
+        // addUserId(requestBody)
         console.log('saving post', requestBody)
         database.addPost(requestBody)
         response.json(requestBody)
     }
-
 
     function updatePost(request, response) {
         const requestBody = request.body
@@ -31,8 +30,11 @@ const setupV2Routes = (apiRouter) => {
     }
 
     function clearAllPosts() {
-        console.log('clearAllPosts from setupV2Routes.js')
         database.clearAllPosts()
+    }
+
+    function deletePost(uid) {
+        return database.deletePost(uid)
     }
 
     // Middleware
@@ -44,6 +46,7 @@ const setupV2Routes = (apiRouter) => {
     router.post('/addPost', textParser, addNewPost)
     router.post('/updatePost', textParser, updatePost)
     router.post('/clear', clearAllPosts)
+    router.post('/delete', deletePost)
 
     apiRouter.use('/v2', router)
 };
