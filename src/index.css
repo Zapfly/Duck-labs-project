@@ -8,6 +8,11 @@ header {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     justify-items: center;
+    align-items: center;
+    background-color: #1877F2;
+    color: white;
+    font-family: 'Titillium Web', sans-serif;
+    height: 30px;
     grid-column-start: 1;
     grid-column-end: -1;
 }
@@ -32,3 +37,15 @@ header {
     grid-column-start: 2 ;
 }
 
+.card {
+    border: 4px solid teal;
+    border-top: 1px solid grey;
+    border-left: 1px solid grey;
+    border-radius: 8px;
+}
+
+.post-card {
+    min-height: 2rem;
+    margin: 3px;
+    padding: 5px;
+}
