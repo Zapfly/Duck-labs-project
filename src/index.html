@@ -6,19 +6,31 @@
     <title>Document</title>
     <link rel='stylesheet' href='./index.css'>
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">    <script type='text/javascript' src="scripts/index.js" ></script>
-    <script type='text/javascript' src="scripts/jquery-3.5.1.js" ></script>
 </head>
 <body>
     <header>
         <img class="fakebook-logo" src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png" />
+        <input class='search-bar' value='search bar under construction'>
         <div> Welcome to Fakebook!</div>
         <div> Log in button?</div>
     </header>
     <div class="status-input card">
-        <!-- What's on your mind? -->
-        <div class="create-status-text">Create Status</div>         
+        <span>Create Post</span>
+        <img class='profile-thumbnail' src="" />
+        <!-- <div class="create-status-text">Create Status</div>          -->
         <div><input id='statusInputField'  type="text" placeholder="What's on your mind?" /></div>
-        <div> <button id="postButton" onClick='postButtonPressed()'>Submit</button> </div>
+        <div> 
+            <div class='button-div'> 
+                <button id="postButton" onClick='postButtonPressed()'>Post</button> 
+            </div>
+            <div class='button-div'> 
+                
+                <button id='fileUploadButton'>
+                    <img class='file-upload-img' src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png"/>
+                    Photo/Video
+                </button> 
+            </div>
+        </div>
     </div>
     <div id="newsFeed">
         This is your news Feed!
@@ -30,5 +42,7 @@
     </div>
     <div> <button id="editPostsButton">Edit Posts</button> </div>
     <div> <button id="clearFeedButton" onClick='clearNewsFeedButtonPressed()'>Clear News Feed</button>   
+        <script type='text/javascript' src="scripts/jquery.js" ></script>
+        <script type='text/javascript' src="scripts/index.js" ></script>
 </body>
 </html>

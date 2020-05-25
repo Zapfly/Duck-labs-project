@@ -46,7 +46,7 @@ const setupV2Routes = (apiRouter) => {
     router.post('/addPost', textParser, addNewPost)
     router.post('/updatePost', textParser, updatePost)
     router.post('/clear', clearAllPosts)
-    router.post('/delete', deletePost)
+    router.post('/delete', textParser, deletePost)
 
     apiRouter.use('/v2', router)
 };

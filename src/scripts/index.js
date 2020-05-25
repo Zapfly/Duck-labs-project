@@ -1,3 +1,4 @@
+// require("./jquery")
 
 function cleanOutElement(id) {
   $('#'+id).html('')
@@ -43,8 +44,17 @@ function todaysDateString() {
 examplePost = { postText: "Hi, this is a test post 0", image:"", author: "Tony Enerson", postDate: "2020-05-19"}
 
 function addPostToPage(post) {
+  console.log("from addPostToPage")
   console.log(post)
-    let postHtml = `<div class="post-card card" id="${post.uid}">${post.postText}<div class="post-footer">${post.author}: ${post.postDate}</div></div>`
+    let postHtml = `
+      <div class="post-card card" id="${post.uid}">
+        ${post.postText}
+        <button onclick="deleteButtonPressed(${post.uid})">X</button>
+        <div class="post-footer">
+          ${post.author}: ${post.postDate}
+        </div>
+      </div>
+    `
     appendHtml('newsFeed', postHtml)
 }
 
@@ -66,7 +76,7 @@ function getPostFromForm() {
     postText: getInputValue('statusInputField'),
     author: authorName,
     postDate: todaysDateString(),
-    uid: new Date().getTime() 
+    uid: String(new Date().getTime())
   }
 }
 
@@ -84,6 +94,14 @@ function summonEntryFormButtonPressed() {
 
 function clearNewsFeedButtonPressed() {
   clearPostsFromServer()
+}
+
+function deleteButtonPressed(body) {
+  console.log("deleteButtonPressed")
+  let data = {uid: String(body)}
+
+  deleteFromServer(data)  
+
 }
 
 //---- server interaction
@@ -128,6 +146,8 @@ function clearPostsFromServer() {
 }
 
 function deleteFromServer(post) {
+  console.log("from deleteFromServer")
+  console.log(post)
   $.ajax({
     url:'/api/v1/delete',
     type:"POST",
@@ -145,12 +165,19 @@ function deleteFromServer(post) {
 }
 
 
+// jQuery(document).ready(function($){
+
+//   updatePostsFromServer()
+//   hide('postEntryArea')
+  
+//   });
+
+// $(document).ready(function() {
+//   updatePostsFromServer()
+//   hide('postEntryArea')
+// })
 
 
-$(document).ready(function() {
-  updatePostsFromServer()
-  hide('postEntryArea')
-})
 
 // some test data lying around
 testPosts = [

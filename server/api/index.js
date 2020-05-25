@@ -25,9 +25,13 @@ const setupV1Routes = (apiRouter) => {
     response.sendStatus(200)
   }
 
-  function deletePost(request) {
-    return database.deletePost(request.body.uid)
+  function deletePost(request, response) {
+    database.deletePost(request.body.uid)
+    response.sendStatus(200)
 }
+
+// const textParser = bodyParser.json()
+
   // Routing
   const v1Router = Router()
   v1Router.get('/posts', findAllPosts)

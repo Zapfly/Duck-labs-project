@@ -5,12 +5,19 @@ body {
     background-color: #ECF3FF;
 }
 
+button {
+    background-color: transparent;
+    border-color: transparent;
+    display: grid;
+    grid-template-columns: auto;
+}
+
 header {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     justify-items: center;
     align-items: center;
-    background-color: #1877F2;
+    background-color: #4267b2;
     color: white;
     font-family: 'Titillium Web', sans-serif;
     height: 30px;
