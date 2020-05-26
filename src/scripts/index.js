@@ -4,8 +4,13 @@ function add (a, b) {
   return a + b;
 }
 
+function subtract(a,b){
+  return a-b
+}
+
 module.exports = {
-  add 
+  add: add,
+  subtract: subtract
 }
 
 function cleanOutElement(id) {

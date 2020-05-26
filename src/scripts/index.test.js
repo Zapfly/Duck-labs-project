@@ -1,12 +1,14 @@
 let {expect, assert} = require('chai');
-var {add} = require('./index.js');
-// import add from './index.js';
+var {add, subtract} = require('./index.js');
 
 
 describe('testing mocha', function() {
-    describe('add function', function() {
+    describe('simple math functions', function() {
         it('two numbers should be added together', function() {
             expect(add(1, 2)).to.equal(3);
+        })
+        it('the second number should be subtracted from the first', function() {
+            expect(subtract(5, 4)).to.equal(1);
         })
     })
 })
