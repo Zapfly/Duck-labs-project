@@ -1,5 +1,13 @@
 // require("./jquery")
 
+function add (a, b) {
+  return a + b;
+}
+
+module.exports = {
+  add 
+}
+
 function cleanOutElement(id) {
   $('#'+id).html('')
 }
@@ -9,7 +17,7 @@ function appendHtml(id, htmlToAdd) {
 }
 
 function setInputValue(id, newValue) {
-    return $('#'+id).val(newValue)
+  return $('#'+id).val(newValue)
 }
 
 function getInputValue(id) {
