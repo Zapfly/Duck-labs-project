@@ -12,20 +12,22 @@
         <img class="fakebook-logo" src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png" />
         <input class='search-bar' value='search bar under construction'>
         <div> Welcome to Fakebook!</div>
-        <div> Log in button?</div>
+        <div id="profile-info"> 
+            Log in button?
+            <img src="" class="profile-thumbnail" />
+        </div>
     </header>
     <div class="status-input card">
         <span>Create Post</span>
         <img class='profile-thumbnail' src="" />
         <!-- <div class="create-status-text">Create Status</div>          -->
         <div><input id='statusInputField'  type="text" placeholder="What's on your mind?" /></div>
-        <div> 
+        <div class="button-container"> 
             <div class='button-div'> 
                 <button id="postButton" onClick='postButtonPressed()'>Post</button> 
             </div>
             <div class='button-div'> 
-                
-                <button id='fileUploadButton'>
+                <button class='button-with-image' id='fileUploadButton'>
                     <img class='file-upload-img' src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png"/>
                     Photo/Video
                 </button> 
@@ -34,11 +36,14 @@
     </div>
     <div id="newsFeed">
         This is your news Feed!
-        <div class="post-card card"> 
-            <div class="post-text">Look at this picture! Don't I look amazing!</div>
-            <div class="post-content"></div>
-            <!-- <img src="" class="like-button" /> -->
-        </div>
+        <div class="post-card card" id="1">
+            ${post.postText}
+            <button onclick="deleteButtonPressed(1)">&#10005;</button>
+            <div class="post-footer">
+              <img src="like-button" onClick="likeButtonPressed()" />
+              Anonymous: 2020-26-05
+            </div>
+          </div>
     </div>
     <div> <button id="editPostsButton">Edit Posts</button> </div>
     <div> <button id="clearFeedButton" onClick='clearNewsFeedButtonPressed()'>Clear News Feed</button>   

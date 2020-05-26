@@ -49,8 +49,9 @@ function addPostToPage(post) {
     let postHtml = `
       <div class="post-card card" id="${post.uid}">
         ${post.postText}
-        <button onclick="deleteButtonPressed(${post.uid})">X</button>
+        <button onclick="deleteButtonPressed(${post.uid})">&#10005;</button>
         <div class="post-footer">
+          <img src="like-button" onClick="likeButtonPressed()" />
           ${post.author}: ${post.postDate}
         </div>
       </div>

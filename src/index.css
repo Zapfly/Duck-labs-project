@@ -6,15 +6,17 @@ body {
 }
 
 button {
-    background-color: transparent;
-    border-color: transparent;
+    background-color: #ECF3FF;
+    border-color: lightgray;
+    border-radius: 10px;
     display: grid;
     grid-template-columns: auto;
+
 }
 
 header {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     justify-items: center;
     align-items: center;
     background-color: #4267b2;
@@ -31,7 +33,7 @@ header {
 
 .status-input {
     display: grid;
-    grid-template-rows: 1fr 1fr ;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns:5fr 1fr;
     grid-column-start: 2;
     margin: 5px;
@@ -42,7 +44,20 @@ header {
 }
 
 #statusInputField {
-    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    width: 96%;
+    margin: 2%;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    grid-row-start: 3;
+}
+.button-with-image {
+    display: flex;
+    flex-direction: row;
 }
 
 #newsFeed {
@@ -52,9 +67,9 @@ header {
 }
 
 .card {
-    border: 4px solid teal;
-    border-top: 1px solid grey;
-    border-left: 1px solid grey;
+    border: 4px solid lightgray;
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
     border-radius: 8px;
     background-color: white;
     padding: 5px;
