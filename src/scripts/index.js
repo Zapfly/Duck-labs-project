@@ -4,8 +4,13 @@ function add(a, b) {
 	return a + b;
 }
 
+function subtract(a, b) {
+	return a - b;
+}
+
 // module.exports = {
-// 	add
+// 	add: add, 
+// 	subtract: subtract
 // };
 
 function cleanOutElement(id) {
@@ -48,8 +53,6 @@ function todaysDateString() {
 	return new Date().toISOString().substring(0, 10);
   }
 
-
-
 // getting and setting posts on the page
 examplePost = {
 	postText: "Hi, this is a test post 0",
@@ -59,8 +62,6 @@ examplePost = {
 };
 
 function addPostToPage(post) {
-	console.log("from addPostToPage");
-	console.log(post);
 	let postHtml = `
       <div class="post-card card" id="${post.uid}">
         ${post.postText}
@@ -113,7 +114,6 @@ function clearNewsFeedButtonPressed() {
 }
 
 function deleteButtonPressed(body) {
-	console.log("deleteButtonPressed");
 	let data = { uid: String(body) };
 
 	deleteFromServer(data);
@@ -161,8 +161,6 @@ function clearPostsFromServer() {
 }
 
 function deleteFromServer(post) {
-	console.log("from deleteFromServer");
-	console.log(post);
 	$.ajax({
 		url: "/api/v1/delete",
 		type: "POST",
@@ -184,32 +182,3 @@ $(document).ready(function() {
 	// hide("postEntryArea");
 });
 
-// some test data lying around
-testPosts = [
-	{ postText: "Hi, face", author: "Lucas", postDate: "2020-05-19" },
-	{
-		postText: "Hi, this is a test post 0",
-		author: "Tony Enerson",
-		postDate: "2020-05-19"
-	},
-	{
-		postText: "Hi, this is a test post 1",
-		author: "Chris Desmarais",
-		postDate: "2020-05-20"
-	},
-	{
-		postText: "Hi, this is a test post 2",
-		author: "Sheldon Manabat",
-		postDate: "2020-05-20"
-	},
-	{
-		postText: "Hi, this is a test post 3",
-		author: "Tony Enerson",
-		postDate: "2020-05-21"
-	},
-	{
-		postText: "Hi, this is a test post 4",
-		author: "Tony Enerson",
-		postDate: "2020-05-22"
-	}
-];

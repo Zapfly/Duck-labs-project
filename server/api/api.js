@@ -1,10 +1,10 @@
 const express = require("express");
 
-const setupV2Routes = require("./setupv2Routes");
+// const setupV2Routes = require("./setupv2Routes");
 
 const Router = express.Router;
 
-const database = require("../database");
+const database = require("../database/database");
 
 const setupV1Routes = (apiRouter) => {
   // Controller Functions
@@ -43,6 +43,6 @@ const setupV1Routes = (apiRouter) => {
 
 const apiRouter = Router();
 setupV1Routes(apiRouter);
-setupV2Routes(apiRouter);
+// setupV2Routes(apiRouter);
 
 module.exports = apiRouter;
