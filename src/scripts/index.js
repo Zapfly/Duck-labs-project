@@ -182,6 +182,7 @@ function deleteFromServer(post) {
 
 // some test data lying around
 testPosts = [
+    { postText: "Hi, face", author: "Lucas", postDate: "2020-05-19"},
     { postText: "Hi, this is a test post 0", author: "Tony Enerson", postDate: "2020-05-19"},
     { postText: "Hi, this is a test post 1", author: "Chris Desmarais", postDate: "2020-05-20"},
     { postText: "Hi, this is a test post 2", author: "Sheldon Manabat", postDate: "2020-05-20"},
