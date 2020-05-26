@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel='stylesheet' href='./index.css'>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">    <script type='text/javascript' src="scripts/index.js" ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">    
+    <script type='text/javascript' src="scripts/jquery.js" ></script>
+    <script type='text/javascript' src="scripts/index.js" ></script>
+    
 </head>
 <body>
     <header>
@@ -28,7 +31,7 @@
             </div>
             <div class='button-div'> 
                 <button class='button-with-image' id='fileUploadButton'>
-                    <img class='file-upload-img' src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png"/>
+                    <!-- <img class='file-upload-img' src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png"/> -->
                     Photo/Video
                 </button> 
             </div>
@@ -38,16 +41,14 @@
         This is your news Feed!
         <div class="post-card card" id="1">
             ${post.postText}
-            <button onclick="deleteButtonPressed(1)">&#10005;</button>
+            <button onclick="deleteButtonPressed(1)">hello</button>
             <div class="post-footer">
-              <img src="like-button" onClick="likeButtonPressed()" />
+              <img src="images/like-icon.png" onClick="likeButtonPressed()" />
               Anonymous: 2020-26-05
             </div>
           </div>
     </div>
     <div> <button id="editPostsButton">Edit Posts</button> </div>
     <div> <button id="clearFeedButton" onClick='clearNewsFeedButtonPressed()'>Clear News Feed</button>   
-        <script type='text/javascript' src="scripts/jquery.js" ></script>
-        <script type='text/javascript' src="scripts/index.js" ></script>
 </body>
 </html>
