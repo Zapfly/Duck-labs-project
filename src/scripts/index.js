@@ -1,4 +1,4 @@
-// require("./jquery")
+require("./jquery")
 
 function add(a, b) {
 	return a + b;
@@ -40,10 +40,15 @@ function enable(id) {
 	$("#" + id).prop("disabled", false);
 }
 
-module.exports = {
-	add: add,
-	subtract: subtract
-};
+function inputHasSomeText(id) {
+	return getInputValue(id) !== "";
+  }
+
+function todaysDateString() {
+	return new Date().toISOString().substring(0, 10);
+  }
+
+
 
 // getting and setting posts on the page
 examplePost = {
