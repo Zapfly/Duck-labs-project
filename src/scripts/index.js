@@ -40,13 +40,10 @@ function enable(id) {
 	$("#" + id).prop("disabled", false);
 }
 
-function inputHasSomeText(id) {
-	return getInputValue(id) !== "";
-}
-
-function todaysDateString() {
-	return new Date().toISOString().substring(0, 10);
-}
+module.exports = {
+	add: add,
+	subtract: subtract
+};
 
 // getting and setting posts on the page
 examplePost = {
