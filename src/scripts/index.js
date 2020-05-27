@@ -1,4 +1,4 @@
-// require("./jquery")
+// const jquery = require("./jquery")
 
 function add(a, b) {
 	return a + b;
@@ -62,17 +62,26 @@ examplePost = {
 };
 
 function addPostToPage(post) {
-	let postHtml = `
-      <div class="post-card card" id="${post.uid}">
-        ${post.postText}
-        <button onclick="deleteButtonPressed(${post.uid})">&#10005;</button>
-        <div class="post-footer">
-          <img src="images/like-icon.png" onClick="likeButtonPressed()" />
-          ${post.author}: ${post.postDate}
-        </div>
-      </div>
-    `;
-	appendHtml("newsFeed", postHtml);
+	if (post.postText !== undefined) {		
+		let postHtml = `
+		<div class="post-card card" id="${post.uid}">
+			${post.author}: ${post.postDate}
+			<button class="delete-button" onclick="deleteButtonPressed(${post.uid})">&#10005;</button>
+			<div class="post-card-text">${post.postText}</div>
+			<input class="comment-input" />
+			<div class="post-footer">
+				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
+					Like
+				</button>
+				<button class='button-with-image under-construction' id='commentButton' onClick="commentButtonPressed()">
+					&#128172; Comment
+				</button>
+				
+			</div>
+		</div>
+		`;
+		appendHtml("newsFeed", postHtml);
+	}
 }
 
 function updatePagePosts(posts) {
@@ -104,10 +113,6 @@ function postButtonPressed() {
 	}
 }
 
-function summonEntryFormButtonPressed() {
-	show("postEntryArea");
-	hide("summonEntryFormButton");
-}
 
 function clearNewsFeedButtonPressed() {
 	clearPostsFromServer();
@@ -137,6 +142,7 @@ function postPostsToServerAndUpdatePage(post) {
 }
 
 function updatePostsFromServer() {
+	console.log("posts updated")
 	$.getJSON("/api/v1/posts")
 		.done(function(posts) {
 			updatePagePosts(posts);
@@ -179,6 +185,5 @@ function deleteFromServer(post) {
 
 $(document).ready(function() {
 	updatePostsFromServer();
-	// hide("postEntryArea");
 });
 

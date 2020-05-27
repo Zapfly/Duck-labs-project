@@ -13,35 +13,30 @@
 
 <body>
     <header>
-        <img class="fakebook-logo" src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png" />
-        <input class='search-bar' value='search bar under construction'>
-        <div> Welcome to Fakebook!</div>
-        <div id="profile-info"> 
+        <img class="fakebook-logo" src="./FAKEbook.png" alt="Fakebook Logo" />
+        <div id=searchBarContainer>
+            <input class='search-bar under-construction' placeholder='search bar under construction'>
+        </div>
+        <div id="profile-info" class="under-construction"> 
             Log in button?
-            <img src="../images/FAKEbook.png" class="profile-thumbnail" />
+            <img src="" class="profile-thumbnail under-construction" />
         </div>
     </header>
     <div class="status-input card">
         <span>Create Post</span>
         <img class='profile-thumbnail' src="" />
         <!-- <div class="create-status-text">Create Status</div>          -->
-        <div><input id='statusInputField'  type="text" placeholder="What's on your mind?" /></div>
+        <input id='statusInputField'  type="text" placeholder="What's on your mind?" />
         <div class="button-container"> 
-            <div class='button-div'> 
                 <button id="postButton" onClick='postButtonPressed()'>Post</button> 
-            </div>
-            <div class='button-div'> 
-                <button class='button-with-image' id='fileUploadButton'>
-                    <!-- <img class='file-upload-img' src="/rsrc.php/v3/yJ/r/WLMICQy30Z7.png"/> -->
+                <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;
                     Photo/Video
                 </button> 
-            </div>
         </div>
     </div>
     <div id="newsFeed">
         <!-- posts will go here-->
     </div>
-    <div> <button id="editPostsButton">Edit Posts</button> </div>
     <div> <button id="clearFeedButton" onClick='clearNewsFeedButtonPressed()'>Clear News Feed</button>   
 </body>
 </html>
