@@ -65,8 +65,15 @@ function addPostToPage(post) {
 	if (post.postText !== undefined) {		
 		let postHtml = `
 		<div class="post-card card" id="${post.uid}">
-			${post.author}: ${post.postDate}
-			<button class="delete-button" onclick="deleteButtonPressed(${post.uid})">&#10005;</button>
+			<div class='post-card-header'>
+				<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
+				<div> 
+					${post.author}
+					</br>
+					${post.postDate}
+				</div>
+			</div>
+			<button class="ellipsis-button" onclick="ellipsisButtonPressed(${post.uid})">&#8285;</button>
 			<div class="post-card-text">${post.postText}</div>
 			<input class="comment-input" />
 			<div class="post-footer">

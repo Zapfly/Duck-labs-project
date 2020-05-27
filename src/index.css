@@ -21,6 +21,11 @@ button {
     align-items: center;
 }
 
+button:hover{
+    cursor: pointer;
+    background-color: rgb(64, 128, 240);
+    
+}
 /*header and its contents*/
 
 header {
@@ -31,7 +36,7 @@ header {
     background-color: #4267b2;
     color: white;
     font-family: 'Titillium Web', sans-serif;
-    height: 30px;
+    height: fit-content;
     grid-column-start: 1;
     grid-column-end: -1;
 }
@@ -45,8 +50,8 @@ header {
     width: 100%;
 }
 
-.search-bar {
-}
+/* .search-bar {
+} */
 
 #profile-info {
     grid-column-start: 5;
@@ -111,6 +116,14 @@ header {
     margin: 3px;
 }
 
+.post-card-header {
+    color: #4267b2;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    font-size: 100%;
+    margin-bottom: 5%;                                                                                                               
+}
 .delete-button {
     width: fit-content;
     justify-self: right;
@@ -147,4 +160,18 @@ header {
 
 .file-upload-img {
     height: 20px;
+}
+.ellipsis-button {
+    width: fit-content;
+    /* text-align: center; */
+    top: 50%;
+    justify-self: right;
+    background-color: transparent;
+    border: transparent;    
+}
+
+.profile-thumbnail {
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 2%;
 }
