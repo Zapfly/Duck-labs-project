@@ -56,7 +56,11 @@ examplePost = {
 	postDate: "2020-05-19"
 };
 
-function addPostToPage(post) {
+function showEditDropdown(postId) {
+	
+}
+
+function addPostToPage(post, e, inlineCss) {
 	if (post.postText !== undefined) {		
 		let postHtml = `
 		<div class="post-card card" id="${post.uid}">
@@ -68,7 +72,13 @@ function addPostToPage(post) {
 					${post.postDate}
 				</div>
 			</div>
-			<button class="ellipsis-button" onclick="ellipsisButtonPressed(${post.uid})">&#8285;</button>
+			<div class="dropdown-container">
+				<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
+				<div id="list${post.uid}" class="dropdown-content"> 
+					<div class="drop-down-item" onclick="edit()"> Edit </div>
+					<div class="drop-down-item" onclick="deleteButtonPressed(${post.uid})"> Delete </div>
+				</div>
+			</div>
 			<div class="post-card-text">${post.postText}</div>
 			<input class="comment-input" />
 			<div class="post-footer">
@@ -83,7 +93,27 @@ function addPostToPage(post) {
 		</div>
 		`;
 		appendHtml("newsFeed", postHtml);
+		hide(`list${post.uid}`)
+
 	}
+}
+{/* <div id="list${post.uid}" class="overlap" style="{{${inlineCss}}}"> 
+</div> */}
+
+
+function ellipsisButtonPressed(id) {
+	console.log($("#" + id).attr("style"))
+	if ($("#" + id).attr("style") == "display: none;") {
+		console.log(true)
+		show(id);
+	} else {
+		hide(id)
+	}
+}
+
+function ellipsisButtonBlurred(id) {
+	console.log("div is blurred")
+	hide(id)
 }
 
 function updatePagePosts(posts) {
@@ -120,8 +150,8 @@ function clearNewsFeedButtonPressed() {
 	clearPostsFromServer();
 }
 
-function deleteButtonPressed(body) {
-	let data = { uid: String(body) };
+function deleteButtonPressed(id) {
+	let data = { uid: String(id) };
 
 	deleteFromServer(data);
 }

@@ -1,3 +1,9 @@
+input {
+    border-radius: 10px;
+    border-color: lightgray;
+    padding:  2px;
+}
+
 body {
     display: grid;
     grid-template-rows: 1fr 1fr auto;
@@ -104,7 +110,7 @@ header {
     border: 4px solid lightgray;
     border-top: 1px solid lightgray;
     border-left: 1px solid lightgray;
-    border-radius: 8px;
+    border-radius: 3px;
     background-color: white;
     padding: 5px;
 }
@@ -161,6 +167,11 @@ header {
 .file-upload-img {
     height: 20px;
 }
+
+.dropdown-container {
+    display: grid;
+}
+
 .ellipsis-button {
     width: fit-content;
     /* text-align: center; */
@@ -174,4 +185,30 @@ header {
     height: 40px;
     border-radius: 50%;
     margin-right: 2%;
+}
+
+/* .overlap {
+    position: relative;
+    display: inline-block
+} */
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: fit-content;
+    border: 4px solid lightgray;
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 5px;
+
+    /* z-index: 1; */
+}
+
+.show {display:block;}
+
+.drop-down-item:hover {
+    background-color: #4267b2;
 }
