@@ -27,6 +27,11 @@ const setupV1Routes = (apiRouter) => {
     response.sendStatus(200);
   }
 
+  function updatePost(request, response) {
+    database.updatePost(request.body); 
+    response.sendStatus(200);
+  }
+
   // const textParser = bodyParser.json()
 
   // Routing
@@ -35,6 +40,8 @@ const setupV1Routes = (apiRouter) => {
   v1Router.post("/addPost", addNewPost);
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
+  v1Router.post("/updatePost", updatePost);
+  
 
   apiRouter.use("/v1", v1Router);
 };

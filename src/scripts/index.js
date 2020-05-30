@@ -56,104 +56,119 @@ examplePost = {
 	postDate: "2020-05-19"
 };
 
-function showEditDropdown(postId) {
-	
-}
 
-function addPostToPage(post, e, inlineCss) {
+function addPostToPage(post) {
 	if (post.postText !== undefined) {		
 		let postHtml = `
-		<div class="post-card card" id="${post.uid}">
-			<div class='post-card-header'>
-				<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
-				<div> 
+			<div class="post-card card" id="${post.uid}">
+				<div class='post-card-header'>
+					<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
+					<div> 
 					${post.author}
 					</br>
-					${post.postDate}
+					<div id='date${post.uid}'>${post.postDate}</div>
+					</div>
+				</div>
+				<div class="dropdown-container">
+					<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
+					<div id="list${post.uid}" class="dropdown-content"> 
+						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}', '${post.postText}')"> Edit </div>
+							<div class="drop-down-item" onclick="deleteButtonPressed(${post.uid})"> Delete </div>
+						</div>
+					</div>
+				<div id="textArea${post.uid}" class="post-card-text">${post.postText}</div>
+				<input class="comment-input" />
+				<div class="post-footer">
+					<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
+						Like
+					</button>
+					<button class='button-with-image under-construction' id='commentButton' onClick="commentButtonPressed()">
+						&#128172; Comment
+					</button>	
 				</div>
 			</div>
-			<div class="dropdown-container">
-				<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
-				<div id="list${post.uid}" class="dropdown-content"> 
-					<div class="drop-down-item" onclick="edit()"> Edit </div>
-					<div class="drop-down-item" onclick="deleteButtonPressed(${post.uid})"> Delete </div>
-				</div>
-			</div>
-			<div class="post-card-text">${post.postText}</div>
-			<input class="comment-input" />
-			<div class="post-footer">
-				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
-					Like
-				</button>
-				<button class='button-with-image under-construction' id='commentButton' onClick="commentButtonPressed()">
-					&#128172; Comment
-				</button>
+				`;
+				appendHtml("newsFeed", postHtml);
+				hide(`list${post.uid}`)
 				
+			}
+		}	
+	
+	function ellipsisButtonPressed(id) {
+		if ($("#" + id).attr("style") == "display: none;") {
+			show(id);
+		} else {
+			hide(id);
+		}
+	}
+	
+	function editButtonPressed(id, text, ) {
+		let date = getInputValue(`date${id}`)
+		console.log(date)
+		console.log($("#" + id))
+		$("#" + `textArea${id}`).replaceWith(
+			`
+			<div id="${id}container" class="post-card-text">
+				<textarea type='text' id="textArea${id}">${text} </textarea>
+				<button onclick="saveChangesButtonPressed('${id}')">Save</button>
 			</div>
-		</div>
-		`;
-		appendHtml("newsFeed", postHtml);
-		hide(`list${post.uid}`)
+			`
+		)
+	}
+
+	
+	function getPostFromForm(inputTextid, inputDate = String(todaysDateString())) {
+		let authorName;
+		if (inputHasSomeText(`${inputTextid}`)) {
+			console.log("post has text")
+			authorName = "Anonymous";
+		} else {
+			authorName = getInputValue(`${inputTextid}`);
+			console.log("post does not have text")
+			
+		}
+		return {
+			postText: getInputValue(`${inputTextid}`),
+			author: authorName,
+			postDate: inputDate,
+			uid: String(new Date().getTime())
+		};
+	}
+	
+	function postButtonPressed() {
+		let postToAdd = getPostFromForm();
+		if (inputHasSomeText("statusInputField")) {
+			postPostsToServerAndUpdatePage(postToAdd);
+		}
+	}
+	
+	
+	function clearNewsFeedButtonPressed() {
+		clearPostsFromServer();
+	}
+	
+	function deleteButtonPressed(id) {
+		let data = { uid: String(id) };
+		
+		deleteFromServer(data);
+	}
+	function saveChangesButtonPressed(id) {
+		let newText = `textArea${id}`
+		let date = 	$("#" + `date${id}`).text();
+
+		console.log(newText)
+		console.log(date)
+
+		let newPost = getPostFromForm(newText, date)
+		console.log(newPost)
 
 	}
-}
-{/* <div id="list${post.uid}" class="overlap" style="{{${inlineCss}}}"> 
-</div> */}
 
-
-function ellipsisButtonPressed(id) {
-	console.log($("#" + id).attr("style"))
-	if ($("#" + id).attr("style") == "display: none;") {
-		console.log(true)
-		show(id);
-	} else {
-		hide(id)
-	}
-}
-
-function ellipsisButtonBlurred(id) {
-	console.log("div is blurred")
-	hide(id)
-}
-
-function updatePagePosts(posts) {
-	cleanOutElement("newsFeed");
-	posts.forEach(function(post) {
+	function updatePagePosts(posts) {
+		cleanOutElement("newsFeed");
+		posts.forEach(function(post) {
 		addPostToPage(post);
 	});
-}
-
-function getPostFromForm() {
-	let authorName;
-	if (inputHasSomeText("statusInputField")) {
-		authorName = "Anonymous";
-	} else {
-		authorName = getInputValue("authorText");
-	}
-	return {
-		postText: getInputValue("statusInputField"),
-		author: authorName,
-		postDate: todaysDateString(),
-		uid: String(new Date().getTime())
-	};
-}
-
-function postButtonPressed() {
-	let postToAdd = getPostFromForm();
-	if (inputHasSomeText("statusInputField")) {
-		postPostsToServerAndUpdatePage(postToAdd);
-	}
-}
-
-
-function clearNewsFeedButtonPressed() {
-	clearPostsFromServer();
-}
-
-function deleteButtonPressed(id) {
-	let data = { uid: String(id) };
-
-	deleteFromServer(data);
 }
 
 //---- server interaction
@@ -213,6 +228,10 @@ function deleteFromServer(post) {
 			// what do we do here?
 		}
 	});
+}
+
+function updateOnePost(post) {
+	
 }
 
 $(document).ready(function() {

@@ -2,6 +2,12 @@ input {
     border-radius: 10px;
     border-color: lightgray;
     padding:  2px;
+
+}
+
+textarea {
+    resize: none;
+    width: 98%;
 }
 
 body {
