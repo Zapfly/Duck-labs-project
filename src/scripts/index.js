@@ -1,4 +1,4 @@
-// const jquery = require("./jquery")
+//const jquery = require("./jquery")
 
 function add(a, b) {
 	return a + b;
@@ -7,11 +7,6 @@ function add(a, b) {
 function subtract(a, b) {
 	return a - b;
 }
-
-// module.exports = {
-// 	add: add, 
-// 	subtract: subtract
-// };
 
 function cleanOutElement(id) {
 	$("#" + id).html("");
@@ -194,3 +189,7 @@ $(document).ready(function() {
 	updatePostsFromServer();
 });
 
+// module.exports = {
+// 	add: add, 
+// 	subtract: subtract
+// };
