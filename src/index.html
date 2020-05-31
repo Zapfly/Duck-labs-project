@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FAKEbook</title>
     <link rel='stylesheet' href='./index.css'>
 
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">    
@@ -26,7 +26,7 @@
         <span>Create Post</span>
         <img class='profile-thumbnail' src="" />
         <!-- <div class="create-status-text">Create Status</div>          -->
-        <input id='statusInputField'  type="text" placeholder="What's on your mind?" />
+        <input id='statusInputField'  type="text" placeholder="What's on your mind?" onkeypress="pressEnterKey('statusInputField', postButtonPressed)"/>
         <div class="button-container"> 
                 <button id="postButton" onClick='postButtonPressed()'>Post</button> 
                 <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;

@@ -76,17 +76,23 @@ function addPostToPage(post) {
 						</div>
 					</div>
 				<div id="textArea${post.uid}" class="post-card-text">${post.postText}</div>
-				<input class="comment-input" />
+		
 				<div class="post-footer">
-					<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
-						Like
-					</button>
-					<button class='button-with-image under-construction' id='commentButton' onClick="commentButtonPressed()">
-						&#128172; Comment
-					</button>	
-				</div>
+				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
+					Like
+				</button>
+				<button class='button-with-image under-construction' id='commentButton${post.uid}' onClick="commentButtonPressed(${post.uid})">
+					&#128172; Comment
+				</button>
 			</div>
-				`;
+			</div>
+			<button class="ellipsis-button" onclick="ellipsisButtonPressed(${post.uid})">&#8285;</button>
+			<div class="post-card-text">${post.postText}</div>
+			<div class='comment-area'>
+				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..."/>
+			</div>
+		</div>
+		`;
 		appendHtml("newsFeed", postHtml);
 		hide(`list${post.uid}`)
 	}
@@ -135,10 +141,35 @@ function postButtonPressed() {
 	if (inputHasSomeText("statusInputField")) {
 		let postToAdd = getPostFromForm("statusInputField");
 		postPostsToServerAndUpdatePage(postToAdd);
-	} else {
+		clearInputField("statusInputField");
+	}	 else {
 		return "Please Add a Message"
 	}
 }
+
+
+function clearInputField(id) {
+	$("#" + id).val("");
+}
+
+function pressEnterKey(id, actionFunction) {
+	$("#" + id).keyup(function(e) {
+		let code = e.which;
+		if (code == 13) {
+			e.preventDefault();
+			actionFunction();
+		}
+	});
+}
+
+function commentButtonPressed(cardId) {
+	let id = String(cardId);
+	$("#commentButton" + id).click(function(e) {
+		$("#commentInput" + id).focus();
+	});
+}
+
+
 
 function clearNewsFeedButtonPressed() {
 	clearPostsFromServer();
@@ -189,7 +220,7 @@ function postPostsToServerAndUpdatePage(post) {
 }
 
 function updatePostsFromServer() {
-	console.log("posts updated")
+	console.log("posts updated");
 	$.getJSON("/api/v1/posts")
 		.done(function (posts) {
 			updatePagePosts(posts);
