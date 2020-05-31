@@ -28,7 +28,7 @@ const setupV1Routes = (apiRouter) => {
   }
 
   function updatePost(request, response) {
-    database.updatePost(request.body); 
+    database.updatePost(request.body);
     response.sendStatus(200);
   }
 

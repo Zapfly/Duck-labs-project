@@ -1,10 +1,11 @@
-const seedMessage = {
-  messageText: 'Your very first message',
-  author: 'Anonymous',
-  messageDate: new Date().toISOString().substring(0, 10),
-}
+// const seedMessage = {
+//   postText: 'Your very first message',
+//   image: "",
+//   author: 'Anonymous',
+//   postDate: new Date().toISOString().substring(0, 10),
+// }
 
-let content = [seedMessage]
+let content = []
 
 // Post functions
 
@@ -15,7 +16,7 @@ function addPost(newContent) {
 function updatePost(newContent) {
   const messageToUpdate = content.find((c) => c.uid == newContent.uid)
   if (messageToUpdate) {
-    messageToUpdate.messageText = newContent.messageText
+    messageToUpdate.postText = newContent.postText
   }
 }
 
