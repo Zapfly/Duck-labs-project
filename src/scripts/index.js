@@ -1,4 +1,5 @@
 //const jquery = require("./jquery")
+var commentFunctions = require("./comments");
 
 function add(a, b) {
 	return a + b;
@@ -278,98 +279,7 @@ function updateOnePost(post) {
 
 $(document).ready(function() {
 	updatePostsFromServer();
-});
-
-// module.exports = {
-// 	add: add,
-// 	subtract: subtract
-// };
-
-function updatePagePosts(posts) {
-	cleanOutElement("newsFeed");
-	posts.forEach(function(post) {
-		addPostToPage(post);
-	});
-}
-
-//---- server interaction
-function postPostsToServerAndUpdatePage(post) {
-	$.ajax({
-		url: "/api/v1/addPost",
-		type: "POST",
-		data: JSON.stringify(post),
-		contentType: "application/json; charset=utf-8",
-		success: function() {
-			console.log("In post callback");
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			// what do we do here?
-		}
-	});
-}
-
-function updatePostsFromServer() {
-	console.log("posts updated");
-	$.getJSON("/api/v1/posts")
-		.done(function(posts) {
-			updatePagePosts(posts);
-		})
-		.fail(function(error) {
-			// what do we do here????
-		});
-}
-
-function clearPostsFromServer() {
-	$.ajax({
-		url: "/api/v1/clear",
-		type: "POST",
-		success: function() {
-			console.log("server has been cleared");
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			// what do we do here?
-		}
-	});
-}
-
-function deleteFromServer(post) {
-	$.ajax({
-		url: "/api/v1/delete",
-		type: "POST",
-		data: JSON.stringify(post),
-		contentType: "application/json; charset=utf-8",
-		success: function() {
-			console.log("message has been deleted");
-
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			console.log(error);
-		}
-	});
-}
-
-function updateOnePost(post) {
-	$.ajax({
-		url: "/api/v1/updatePost",
-		type: "POST",
-		data: JSON.stringify(post),
-		contentType: "application/json; charset=utf-8",
-		success: function() {
-			console.log(`message ${post.uid} has been updated`);
-
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			console.log(error);
-		}
-	});
-}
-
-$(document).ready(function() {
-	updatePostsFromServer();
+	commentFunctions.test();
 });
 
 // module.exports = {
