@@ -114,7 +114,7 @@ function editButtonPressed(id, text) {
 	)
 }
 
-function getPostFromForm(inputTextId, inputDate = String(todaysDateString())) {
+function getPostFromForm(inputTextId, inputDate = String(todaysDateString()), id = String(new Date().getTime())) {
 	let authorName = "Anonymous";
 	if (inputHasSomeText(inputTextId)) {
 		console.log("post has text")
@@ -127,7 +127,7 @@ function getPostFromForm(inputTextId, inputDate = String(todaysDateString())) {
 		postText: getInputValue(inputTextId),
 		author: authorName,
 		postDate: inputDate,
-		uid: String(new Date().getTime())
+		uid: id
 	}
 }
 
@@ -157,8 +157,9 @@ function saveChangesButtonPressed(id) {
 	console.log(newText)
 	// console.log(date)
 
-	let newPost = getPostFromForm(newText, date)
+	let newPost = getPostFromForm(`textArea${id}`, date, `${id}`)
 	console.log(newPost)
+	console.log(date)
 
 	updateOnePost(newPost);
 }
