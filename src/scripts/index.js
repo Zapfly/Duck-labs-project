@@ -63,9 +63,9 @@ function addPostToPage(post) {
 				<div class='post-card-header'>
 					<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
 					<div> 
-					${post.author}
-					</br>
-					<div id='date${post.uid}'>${post.postDate}</div>
+						${post.author}
+						</br>
+						<div id='date${post.uid}'>${post.postDate}</div>
 					</div>
 				</div>
 				<div class="dropdown-container">
@@ -85,16 +85,14 @@ function addPostToPage(post) {
 					&#128172; Comment
 				</button>
 			</div>
-			</div>
-			<button class="ellipsis-button" onclick="ellipsisButtonPressed(${post.uid})">&#8285;</button>
-			<div class="post-card-text">${post.postText}</div>
+			
 			<div class='comment-area'>
 				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..."/>
 			</div>
 		</div>
 		`;
 		appendHtml("newsFeed", postHtml);
-		hide(`list${post.uid}`)
+		hide(`list${post.uid}`);
 	}
 }
 
@@ -107,9 +105,10 @@ function ellipsisButtonPressed(id) {
 }
 
 function editButtonPressed(id, text) {
-	let date = getInputValue(`date${id}`)
-	console.log(date)
-	console.log($("#" + id))
+	let date = getInputValue(`date${id}`);
+	console.log(date);
+	console.log($("#" + id));
+
 	$("#" + `textArea${id}`).replaceWith(
 		`
 			<div id="${id}container" class="post-card-text">
@@ -117,13 +116,17 @@ function editButtonPressed(id, text) {
 				<button onclick="saveChangesButtonPressed('${id}')">Save</button>
 			</div>
 		`
-	)
+	);
 }
 
-function getPostFromForm(inputTextId, inputDate = String(todaysDateString()), id = String(new Date().getTime())) {
+function getPostFromForm(
+	inputTextId,
+	inputDate = String(todaysDateString()),
+	id = String(new Date().getTime())
+) {
 	let authorName = "Anonymous";
 	if (inputHasSomeText(inputTextId)) {
-		console.log("post has text")
+		console.log("post has text");
 		authorName = "Anonymous";
 	} else {
 		// authorName = getInputValue(`${inputTextid}`);
@@ -134,7 +137,7 @@ function getPostFromForm(inputTextId, inputDate = String(todaysDateString()), id
 		author: authorName,
 		postDate: inputDate,
 		uid: id
-	}
+	};
 }
 
 function postButtonPressed() {
@@ -142,11 +145,10 @@ function postButtonPressed() {
 		let postToAdd = getPostFromForm("statusInputField");
 		postPostsToServerAndUpdatePage(postToAdd);
 		clearInputField("statusInputField");
-	}	 else {
-		return "Please Add a Message"
+	} else {
+		return "Please Add a Message";
 	}
 }
-
 
 function clearInputField(id) {
 	$("#" + id).val("");
@@ -164,40 +166,36 @@ function pressEnterKey(id, actionFunction) {
 
 function commentButtonPressed(cardId) {
 	let id = String(cardId);
-	$("#commentButton" + id).click(function(e) {
-		$("#commentInput" + id).focus();
-	});
+	$("#commentInput" + id).focus();
 }
-
-
 
 function clearNewsFeedButtonPressed() {
 	clearPostsFromServer();
 }
 
 function deleteButtonPressed(id) {
-	let data = { uid: String(id) }
+	let data = { uid: String(id) };
 
 	deleteFromServer(data);
 }
 
 function saveChangesButtonPressed(id) {
-	let newText = getInputValue(`textArea${id}`)
+	let newText = getInputValue(`textArea${id}`);
 	let date = $("#" + `date${id}`).text();
 
-	console.log(newText)
+	console.log(newText);
 	// console.log(date)
 
-	let newPost = getPostFromForm(`textArea${id}`, date, `${id}`)
-	console.log(newPost)
-	console.log(date)
+	let newPost = getPostFromForm(`textArea${id}`, date, `${id}`);
+	console.log(newPost);
+	console.log(date);
 
 	updateOnePost(newPost);
 }
 
 function updatePagePosts(posts) {
 	cleanOutElement("newsFeed");
-	posts.forEach(function (post) {
+	posts.forEach(function(post) {
 		addPostToPage(post);
 	});
 }
@@ -209,11 +207,11 @@ function postPostsToServerAndUpdatePage(post) {
 		type: "POST",
 		data: JSON.stringify(post),
 		contentType: "application/json; charset=utf-8",
-		success: function () {
+		success: function() {
 			console.log("In post callback");
 			updatePostsFromServer();
 		},
-		fail: function (error) {
+		fail: function(error) {
 			// what do we do here?
 		}
 	});
@@ -222,10 +220,10 @@ function postPostsToServerAndUpdatePage(post) {
 function updatePostsFromServer() {
 	console.log("posts updated");
 	$.getJSON("/api/v1/posts")
-		.done(function (posts) {
+		.done(function(posts) {
 			updatePagePosts(posts);
 		})
-		.fail(function (error) {
+		.fail(function(error) {
 			// what do we do here????
 		});
 }
@@ -234,11 +232,11 @@ function clearPostsFromServer() {
 	$.ajax({
 		url: "/api/v1/clear",
 		type: "POST",
-		success: function () {
+		success: function() {
 			console.log("server has been cleared");
 			updatePostsFromServer();
 		},
-		fail: function (error) {
+		fail: function(error) {
 			// what do we do here?
 		}
 	});
@@ -250,12 +248,12 @@ function deleteFromServer(post) {
 		type: "POST",
 		data: JSON.stringify(post),
 		contentType: "application/json; charset=utf-8",
-		success: function () {
+		success: function() {
 			console.log("message has been deleted");
 
 			updatePostsFromServer();
 		},
-		fail: function (error) {
+		fail: function(error) {
 			console.log(error);
 		}
 	});
@@ -267,22 +265,114 @@ function updateOnePost(post) {
 		type: "POST",
 		data: JSON.stringify(post),
 		contentType: "application/json; charset=utf-8",
-		success: function () {
+		success: function() {
 			console.log(`message ${post.uid} has been updated`);
 
 			updatePostsFromServer();
 		},
-		fail: function (error) {
+		fail: function(error) {
 			console.log(error);
 		}
-	})
+	});
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
 	updatePostsFromServer();
 });
 
 // module.exports = {
-// 	add: add, 
+// 	add: add,
+// 	subtract: subtract
+// };
+
+function updatePagePosts(posts) {
+	cleanOutElement("newsFeed");
+	posts.forEach(function(post) {
+		addPostToPage(post);
+	});
+}
+
+//---- server interaction
+function postPostsToServerAndUpdatePage(post) {
+	$.ajax({
+		url: "/api/v1/addPost",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		success: function() {
+			console.log("In post callback");
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			// what do we do here?
+		}
+	});
+}
+
+function updatePostsFromServer() {
+	console.log("posts updated");
+	$.getJSON("/api/v1/posts")
+		.done(function(posts) {
+			updatePagePosts(posts);
+		})
+		.fail(function(error) {
+			// what do we do here????
+		});
+}
+
+function clearPostsFromServer() {
+	$.ajax({
+		url: "/api/v1/clear",
+		type: "POST",
+		success: function() {
+			console.log("server has been cleared");
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			// what do we do here?
+		}
+	});
+}
+
+function deleteFromServer(post) {
+	$.ajax({
+		url: "/api/v1/delete",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		success: function() {
+			console.log("message has been deleted");
+
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function updateOnePost(post) {
+	$.ajax({
+		url: "/api/v1/updatePost",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		success: function() {
+			console.log(`message ${post.uid} has been updated`);
+
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+$(document).ready(function() {
+	updatePostsFromServer();
+});
+
+// module.exports = {
+// 	add: add,
 // 	subtract: subtract
 // };
