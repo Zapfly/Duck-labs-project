@@ -110,21 +110,21 @@ function editButtonPressed(id, text) {
 				<textarea type='text' id="textArea${id}">${text} </textarea>
 				<button onclick="saveChangesButtonPressed('${id}')">Save</button>
 			</div>
-			`
+		`
 	)
 }
 
-function getPostFromForm(inputText, inputDate = String(todaysDateString())) {
+function getPostFromForm(inputTextId, inputDate = String(todaysDateString())) {
 	let authorName = "Anonymous";
-	// if (inputHasSomeText(`${inputTextid}`)) {
-	// 	console.log("post has text")
-	// 	authorName = "Anonymous";
-	// } else {
-	// 	// authorName = getInputValue(`${inputTextid}`);
-	// 	console.log("post does not have text");
-	// }
+	if (inputHasSomeText(inputTextId)) {
+		console.log("post has text")
+		authorName = "Anonymous";
+	} else {
+		// authorName = getInputValue(`${inputTextid}`);
+		console.log("post does not have text");
+	}
 	return {
-		postText: inputText,
+		postText: getInputValue(inputTextId),
 		author: authorName,
 		postDate: inputDate,
 		uid: String(new Date().getTime())
@@ -133,8 +133,7 @@ function getPostFromForm(inputText, inputDate = String(todaysDateString())) {
 
 function postButtonPressed() {
 	if (inputHasSomeText("statusInputField")) {
-		let text = getInputValue("statusInputField");
-		let postToAdd = getPostFromForm(text);
+		let postToAdd = getPostFromForm("statusInputField");
 		postPostsToServerAndUpdatePage(postToAdd);
 	} else {
 		return "Please Add a Message"
