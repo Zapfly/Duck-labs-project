@@ -9,7 +9,7 @@ function subtract(a, b) {
 }
 
 // module.exports = {
-// 	add: add, 
+// 	add: add,
 // 	subtract: subtract
 // };
 
@@ -47,11 +47,11 @@ function enable(id) {
 
 function inputHasSomeText(id) {
 	return getInputValue(id) !== "";
-  }
+}
 
 function todaysDateString() {
 	return new Date().toISOString().substring(0, 10);
-  }
+}
 
 // getting and setting posts on the page
 examplePost = {
@@ -62,7 +62,7 @@ examplePost = {
 };
 
 function addPostToPage(post) {
-	if (post.postText !== undefined) {		
+	if (post.postText !== undefined) {
 		let postHtml = `
 		<div class="post-card card" id="${post.uid}">
 			<div class='post-card-header'>
@@ -75,15 +75,18 @@ function addPostToPage(post) {
 			</div>
 			<button class="ellipsis-button" onclick="ellipsisButtonPressed(${post.uid})">&#8285;</button>
 			<div class="post-card-text">${post.postText}</div>
-			<input class="comment-input" />
+			
 			<div class="post-footer">
 				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
 					Like
 				</button>
-				<button class='button-with-image under-construction' id='commentButton' onClick="commentButtonPressed()">
+				<button class='button-with-image under-construction' id='commentButton${post.uid}' onClick="commentButtonPressed(${post.uid})">
 					&#128172; Comment
 				</button>
-				
+			</div>
+			
+			<div class='comment-area'>
+				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..."/>
 			</div>
 		</div>
 		`;
@@ -117,9 +120,30 @@ function postButtonPressed() {
 	let postToAdd = getPostFromForm();
 	if (inputHasSomeText("statusInputField")) {
 		postPostsToServerAndUpdatePage(postToAdd);
+		clearInputField("statusInputField");
 	}
 }
 
+function clearInputField(id) {
+	$("#" + id).val("");
+}
+
+function pressEnterKey(id, actionFunction) {
+	$("#" + id).keyup(function(e) {
+		let code = e.which;
+		if (code == 13) {
+			e.preventDefault();
+			actionFunction();
+		}
+	});
+}
+
+function commentButtonPressed(cardId) {
+	let id = String(cardId);
+	$("#commentButton" + id).click(function(e) {
+		$("#commentInput" + id).focus();
+	});
+}
 
 function clearNewsFeedButtonPressed() {
 	clearPostsFromServer();
@@ -149,7 +173,7 @@ function postPostsToServerAndUpdatePage(post) {
 }
 
 function updatePostsFromServer() {
-	console.log("posts updated")
+	console.log("posts updated");
 	$.getJSON("/api/v1/posts")
 		.done(function(posts) {
 			updatePagePosts(posts);
@@ -193,4 +217,3 @@ function deleteFromServer(post) {
 $(document).ready(function() {
 	updatePostsFromServer();
 });
-
