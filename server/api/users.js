@@ -4,78 +4,93 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const router = express.Router();
+const routerUser = express.Router();
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 
-router.post(
-  "/",
-  [
-    check("name", "Name is required").not().isEmpty(),
-    check("email", "Please enter a valid email").isEmail(),
-    check(
-      "password",
-      "Please enter a password with 6 or more characters"
-    ).isLength({ min: 6 }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    // See if user exists
-    const { name, email, password } = req.body;
+function createUserInputValidation(body) {
+	check(`${body.username}`, "Name is required")
+		.not()
+		.isEmpty();
+	// check("email", "Please enter a valid email").isEmail(),
+	check(
+		`${body.password}`,
+		"Please enter a password with 6 or more characters"
+	).isLength({ min: 6 });
+	// return "User Input Validated"
+	return body;
+}
 
-    try {
-      let user = await User.findOne({ email });
+// routerUser.post(
+// 	"/",
+// 	[
+// 		check("name", "Name is required")
+// 			.not()
+// 			.isEmpty(),
+// 		check("email", "Please enter a valid email").isEmail(),
+// 		check(
+// 			"password",
+// 			"Please enter a password with 6 or more characters"
+// 		).isLength({ min: 6 })
+// 	],
+// 	async (req, res) => {
+// 		const errors = validationResult(req);
+// 		if (!errors.isEmpty()) {
+// 			return res.status(400).json({ errors: errors.array() });
+// 		}
+// 		// See if user exists
+// 		const { name, email, password } = req.body;
 
-      if (user) {
-        return res.status(400).json({
-          errors: [{ msg: "User already exists" }],
-        });
-      }
-      //Get users gravatar
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
+// 		try {
+// 			let user = await User.findOne({ email });
 
-      user = new User({
-        name,
-        email,
-        avatar,
-        password,
-      });
+// 			if (user) {
+// 				return res.status(400).json({
+// 					errors: [{ msg: "User already exists" }]
+// 				});
+// 			}
+// 			//Get users gravatar
+// 			const avatar = gravatar.url(email, {
+// 				s: "200",
+// 				r: "pg",
+// 				d: "mm"
+// 			});
 
-      //Encrypt password
-      const salt = await bcrypt.genSalt(10);
+// 			user = new User({
+// 				name,
+// 				// email,
+// 				// avatar,
+// 				password
+// 			});
 
-      user.password = await bcrypt.hash(password, salt);
+// 			//Encrypt password
+// 			const salt = await bcrypt.genSalt(10);
 
-      await user.save();
+// 			user.password = await bcrypt.hash(password, salt);
 
-      //Return jsonwebtoken
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
+// 			await user.save();
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
-    }
-  }
-);
+// 			//Return jsonwebtoken
+// 			const payload = {
+// 				user: {
+// 					id: user.id
+// 				}
+// 			};
 
-module.exports = router;
+// 			jwt.sign(
+// 				payload,
+// 				config.get("jwtSecret"),
+// 				{ expiresIn: 360000 },
+// 				(err, token) => {
+// 					if (err) throw err;
+// 					res.json({ token });
+// 				}
+// 			);
+// 		} catch (err) {
+// 			console.error(err.message);
+// 			res.status(500).send("Server error");
+// 		}
+// 	}
+// );
+
+module.exports = createUserInputValidation;
