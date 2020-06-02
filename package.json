@@ -9,7 +9,7 @@
   "scripts": {
     "test": "test",
     "start": "cd server && npm start",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "ng build --aot"
   },
   "repository": {
     "type": "git",
