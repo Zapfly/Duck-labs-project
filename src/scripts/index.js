@@ -1,4 +1,5 @@
 //const jquery = require("./jquery")
+var commentFunctions = require("./comments");
 
 function add(a, b) {
   return a + b;
