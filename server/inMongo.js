@@ -1,6 +1,6 @@
 const connectDB = require("./config/db");
 
-function clear() {
+function clearAllPosts() {
   return connect()
     .then((db) => db.collection("messages").drop())
     .then((shouldBeTrue) => Promise.resolve())
@@ -37,7 +37,7 @@ function close() {
 }
 
 module.exports = {
-  clear,
+  clearAllPosts,
   addPost,
   findAllPosts,
   updatePost,

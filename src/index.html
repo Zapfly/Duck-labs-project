@@ -19,7 +19,8 @@
             <input class='search-bar under-construction' placeholder='search bar under construction'>
         </div>
         <div id="profile-info" class="under-construction"> 
-            Log in button?
+            <button id="postButton" onClick="userLogin('username', 'password')">Log in</button> 
+            
             <img src="" class="profile-thumbnail under-construction" />
         </div>
     </header>
@@ -29,7 +30,7 @@
         <!-- <div class="create-status-text">Create Status</div>          -->
         <input id='statusInputField'  type="text" placeholder="What's on your mind?" onkeypress="pressEnterKey('statusInputField', postButtonPressed)"/>
         <div class="button-container"> 
-                <button id="postButton" onClick='postButtonPressed()'>Post</button> 
+                <button id="postButton" onClick="postButtonPressed()">Post</button> 
                 <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;
                     Photo/Video
                 </button> 
