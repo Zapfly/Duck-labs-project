@@ -42,9 +42,17 @@ const setupV1Routes = (apiRouter) => {
     }
   }
 
-  function deletePost(request, response) {
-    database.deletePost(request.body.uid);
-    response.sendStatus(200);
+  async function deletePost(request, response) {
+    try {
+      const post = await Post.find({ uid: request.body.uid }).remove({});
+      response.json(post);
+      response.sendStatus(200);
+      // await post.remove();
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send("Server Error");
+    }
   }
 
   function updatePost(request, response) {
