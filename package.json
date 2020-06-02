@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "test",
-    "duck-labs-project": "npm start --prefix duck-labs-project",
-    "heroku-postbuild": "NPM-CONFIG_PRODUCTION=false --prefix duck-labs-project && npm run build --prefix duck-labs-project"
+    "Duck-labs-project": "npm start --prefix Duck-labs-project",
+    "heroku-postbuild": "NPM-CONFIG_PRODUCTION=false --prefix Duck-labs-project && npm run build --prefix Duck-labs-project"
   },
   "repository": {
     "type": "git",

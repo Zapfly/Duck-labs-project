@@ -19,11 +19,11 @@ app.use("/", express.static("../src"));
 
 //Server static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("duck-labs-project"));
+  app.use(express.static("Duck-labs-project"));
 
   app.get("*", (request, response) => {
     response.sendFile(
-      path.resolve(__dirname, "duck-labs-project", "build", "index.html")
+      path.resolve(__dirname, "Duck-labs-project", "build", "index.html")
     );
   });
 }
