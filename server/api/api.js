@@ -1,5 +1,8 @@
 const express = require("express");
-
+const mongo = require("../inMongo");
+const Post = require("../models/Posts");
+const config = require("config");
+const { check, validationResult } = require("express-validator");
 const Router = express.Router;
 
 const database = require("../database/database");
@@ -11,9 +14,11 @@ const setupV1Routes = (apiRouter) => {
     response.send(allPosts);
   }
 
-  function addNewPost(request, response) {
+  async function addNewPost(request, response) {
+    let post = new Post(request.body);
     console.log("saving post", request.body);
-    database.addPost(request.body);
+    // mongo.addPost(post);
+    await post.save();
     response.sendStatus(200);
   }
 
@@ -41,7 +46,6 @@ const setupV1Routes = (apiRouter) => {
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
   v1Router.post("/updatePost", updatePost);
-  
 
   apiRouter.use("/v1", v1Router);
 };
