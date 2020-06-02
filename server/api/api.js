@@ -29,9 +29,17 @@ const setupV1Routes = (apiRouter) => {
     response.sendStatus(200);
   }
 
-  function clearAllPosts(request, response) {
-    database.clearAllPosts();
-    response.sendStatus(200);
+  async function clearAllPosts(request, response) {
+    try {
+      const posts = await Post.find().remove({});
+      response.json(posts);
+      response.sendStatus(200);
+      console.log(posts);
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send("Server Error");
+    }
   }
 
   function deletePost(request, response) {
