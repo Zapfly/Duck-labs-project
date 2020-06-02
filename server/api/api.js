@@ -9,15 +9,22 @@ const jwt = require("jsonwebtoken");
 
 const setupV1Routes = (apiRouter) => {
   // Controller Functions
-  function findAllPosts(request, response) {
-    let allPosts = database.findAllPosts();
-    response.send(allPosts);
+
+  async function findAllPosts(request, response) {
+    try {
+      const posts = await Post.find().sort({ date: -1 });
+      response.json(posts);
+    } catch (err) {
+      console.error(err.message);
+      response.status(500).send("Server Error");
+    }
+    //   let allPosts = database.findAllPosts();
+    //   response.send(allPosts);
   }
 
   async function addNewPost(request, response) {
     let post = new Post(request.body);
     console.log("saving post", request.body);
-    // mongo.addPost(post);
     await post.save();
     response.sendStatus(200);
   }
@@ -58,11 +65,9 @@ const setupV1Routes = (apiRouter) => {
       request.user = user;
       return next();
     } else {
-      return response
-        .status(401)
-        .json({
-          message: "Basic Authentication failed: Invalid username or password.",
-        });
+      return response.status(401).json({
+        message: "Basic Authentication failed: Invalid username or password.",
+      });
     }
   }
 
@@ -85,11 +90,9 @@ const setupV1Routes = (apiRouter) => {
       request.user = user;
       return next();
     } else {
-      return response
-        .status(401)
-        .json({
-          message: "JWT Authentication failed: Invalid username or password.",
-        });
+      return response.status(401).json({
+        message: "JWT Authentication failed: Invalid username or password.",
+      });
     }
   }
 

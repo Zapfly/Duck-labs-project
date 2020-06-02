@@ -229,10 +229,10 @@ function postPostsToServerAndUpdatePage(post) {
     type: "POST",
     data: JSON.stringify(post),
     contentType: "application/json; charset=utf-8",
-    beforeSend: function (xhr) {
-      //Include the bearer token in header
-      xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-    },
+    // beforeSend: function (xhr) {
+    //   //Include the bearer token in header
+    //   xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+    // },
     success: function () {
       console.log("In post callback");
       updatePostsFromServer();
