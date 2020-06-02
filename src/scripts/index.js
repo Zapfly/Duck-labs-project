@@ -69,7 +69,7 @@ function addPostToPage(post) {
 						<div id='date${post.uid}'>${post.postDate}</div>
 					</div>
 				</div>
-				<div class="dropdown-container">
+				<div  class="dropdown-container">
 					<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
 					<div id="list${post.uid}" class="dropdown-content"> 
 						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}', '${post.postText}')"> Edit </div>
@@ -77,6 +77,11 @@ function addPostToPage(post) {
 						</div>
 					</div>
 				<div id="textArea${post.uid}" class="post-card-text">${post.postText}</div>
+				
+				<div id="${post.uid}container" class="post-card-text">
+	 				<textarea type='text' id="editArea${post.uid}">${post.postText} </textarea>
+	 				<button id="saveChangesButton${post.uid}" onclick="saveChangesButtonPressed('${post.uid}')">Save</button>
+	 			</div>
 		
 				<div class="post-footer">
 				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
@@ -94,6 +99,8 @@ function addPostToPage(post) {
 		`;
 		appendHtml("newsFeed", postHtml);
 		hide(`list${post.uid}`);
+		hide(`editArea${post.uid}`);
+		hide(`saveChangesButton${post.uid}`);
 	}
 }
 
@@ -110,14 +117,10 @@ function editButtonPressed(id, text) {
 	console.log(date);
 	console.log($("#" + id));
 
-	$("#" + `textArea${id}`).replaceWith(
-		`
-			<div id="${id}container" class="post-card-text">
-				<textarea type='text' id="textArea${id}">${text} </textarea>
-				<button onclick="saveChangesButtonPressed('${id}')">Save</button>
-			</div>
-		`
-	);
+	$("#" + `textArea${id}`).toggle();
+	$("#" + `editArea${id}`).toggle();
+	$("#" + `saveChangesButton${id}`).toggle();
+	hide(`list${id}`);
 }
 
 function getPostFromForm(
@@ -187,12 +190,16 @@ function saveChangesButtonPressed(id) {
 	console.log(newText);
 	// console.log(date)
 
-	let newPost = getPostFromForm(`textArea${id}`, date, `${id}`);
+	let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
 	console.log(newPost);
 	console.log(date);
 
 	updateOnePost(newPost);
 }
+
+// function loginButtonPressed(id) {
+
+// }
 
 function updatePagePosts(posts) {
 	cleanOutElement("newsFeed");
@@ -202,12 +209,31 @@ function updatePagePosts(posts) {
 }
 
 //---- server interaction
+
+//WORK IN PROGRESS
+function userLogin(username, password) {
+	$.ajax({
+		url: "/api/v1/login",
+		type: "POST",
+		headers: {
+			Authorization: `Basic ${btoa("username:password")}`
+		},
+		success: function() {
+			console.log("Logged in");
+		}
+	});
+}
+
 function postPostsToServerAndUpdatePage(post) {
 	$.ajax({
 		url: "/api/v1/addPost",
 		type: "POST",
 		data: JSON.stringify(post),
 		contentType: "application/json; charset=utf-8",
+		beforeSend: function(xhr) {
+			//Include the bearer token in header
+			xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+		},
 		success: function() {
 			console.log("In post callback");
 			updatePostsFromServer();
@@ -279,7 +305,6 @@ function updateOnePost(post) {
 
 $(document).ready(function() {
 	updatePostsFromServer();
-	commentFunctions.test();
 });
 
 // module.exports = {
