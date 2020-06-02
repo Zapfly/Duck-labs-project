@@ -22,9 +22,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("duck-labs-project"));
 
   app.get("*", (request, response) => {
-    response.sendFile(
-      path.resolve(__dirname, "duck-labs-project", "build", "index.html")
-    );
+    response.sendFile(path.resolve(__dirname, "build", "index.html"));
   });
 }
 
