@@ -196,6 +196,10 @@ function saveChangesButtonPressed(id) {
 	updateOnePost(newPost);
 }
 
+// function loginButtonPressed(id) {
+
+// }
+
 function updatePagePosts(posts) {
 	cleanOutElement("newsFeed");
 	posts.forEach(function(post) {
@@ -203,13 +207,34 @@ function updatePagePosts(posts) {
 	});
 }
 
+
 //---- server interaction
+
+//WORK IN PROGRESS
+function userLogin(username, password) {
+	$.ajax({
+		url: "/api/v1/login",
+		type: "POST",
+		headers: {
+			Authorization: `Basic ${btoa("username:password")}`
+		},
+		success: function() {
+			console.log("Logged in");	
+		},
+	})
+}
+
+
+
 function postPostsToServerAndUpdatePage(post) {
 	$.ajax({
 		url: "/api/v1/addPost",
 		type: "POST",
 		data: JSON.stringify(post),
 		contentType: "application/json; charset=utf-8",
+		beforeSend: function (xhr) {   //Include the bearer token in header
+			xhr.setRequestHeader("Authorization", 'Bearer '+ jwt);
+		},
 		success: function() {
 			console.log("In post callback");
 			updatePostsFromServer();

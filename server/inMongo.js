@@ -21,7 +21,7 @@ function connect() {
 }
 //mongodb+srv://Fakebook:<password>@cluster0-rangp.mongodb.net/test?retryWrites=true&w=majority
 
-function clear() {
+function clearAllPosts() {
   return connect()
     .then((db) => db.collection('messages').drop())
     .then((shouldBeTrue) => Promise.resolve())
@@ -60,7 +60,7 @@ function close() {
 }
 
 module.exports = {
-  clear,
+  clearAllPosts,
   addPost,
   findAllPosts,
   updatePost,
