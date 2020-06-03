@@ -1,17 +1,17 @@
 const express = require("express");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
-
+const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const router = express.Router();
+// const routerUser = express.Router();
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 
 router.post(
   "/",
   [
-    check("name", "Name is required").not().isEmpty(),
+    check("username", "Name is required").not().isEmpty(),
     check("email", "Please enter a valid email").isEmail(),
     check(
       "password",
@@ -24,27 +24,29 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     // See if user exists
-    const { name, email, password } = req.body;
+    const { username, password, email } = req.body;
 
     try {
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({
+        res.status(400).json({
           errors: [{ msg: "User already exists" }],
         });
+
+        return;
       }
       //Get users gravatar
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
+      //   const avatar = gravatar.url(email, {
+      //     s: "200",
+      //     r: "pg",
+      //     d: "mm",
+      //   });
 
       user = new User({
-        name,
+        username,
         email,
-        avatar,
+        // avatar,
         password,
       });
 
@@ -55,24 +57,23 @@ router.post(
 
       await user.save();
 
-      //Return jsonwebtoken
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
+      //   //Return jsonwebtoken
+      //   const payload = {
+      //     user: {
+      //       id: user.id,
+      //     },
+      //   };
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      //   jwt.sign(
+      //     payload,
+      //     config.get("jwtSecret"),
+      //     { expiresIn: 360000 },
+      //     (err, token) => {
+      //       if (err) throw err;
+      //       res.json({ token });
+      //     }
+      //   );
     } catch (err) {
-      console.error(err.message);
       res.status(500).send("Server error");
     }
   }

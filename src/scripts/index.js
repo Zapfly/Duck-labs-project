@@ -1,6 +1,3 @@
-//const jquery = require("./jquery")
-// var commentFunctions = require("./comments");
-
 function add(a, b) {
   return a + b;
 }
@@ -183,6 +180,14 @@ function deleteButtonPressed(id) {
   deleteFromServer(data);
 }
 
+function createUserButtonPressed() {
+  let uname = getInputValue(`createUserInput`);
+  let pword = getInputValue(`createPassInput`);
+  let email = getInputValue(`createEmailInput`);
+
+  createUser({ username: uname, password: pword, email: email });
+}
+
 function saveChangesButtonPressed(id) {
   let newText = getInputValue(`textArea${id}`);
   let date = $("#" + `date${id}`).text();
@@ -210,6 +215,24 @@ function updatePagePosts(posts) {
 
 //---- server interaction
 
+function createUser(userObject) {
+  console.log("hey");
+  $.ajax({
+    url: "/users",
+    type: "POST",
+    data: JSON.stringify(userObject),
+    contentType: "application/json; charset=utf-8",
+    success: function (message) {
+      console.log("message from idex");
+      console.log(message);
+    },
+    fail: function (errors) {
+      console.log("error");
+      // what do we do here?
+    },
+  });
+}
+
 //WORK IN PROGRESS
 function userLogin(username, password) {
   $.ajax({
@@ -230,9 +253,9 @@ function postPostsToServerAndUpdatePage(post) {
     type: "POST",
     data: JSON.stringify(post),
     contentType: "application/json; charset=utf-8",
-    // beforeSend: function (xhr) {
-    //   //Include the bearer token in header
-    //   xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+    // beforeSend: function(xhr) {
+    // 	//Include the bearer token in header
+    // 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
     // },
     success: function () {
       console.log("In post callback");
