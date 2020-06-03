@@ -2,13 +2,19 @@
   "name": "fakebook",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "12.16.x"
+  },
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "test",
-    "start": "cd server && node server.js"
+
+    "Duck-labs-project": "npm start --prefix Duck-labs-project",
+    "start": "cd server && npm start",
+    "heroku-postbuild": "cd server && npm install"
   },
   "repository": {
     "type": "git",
@@ -24,5 +30,6 @@
     "chai": "^4.2.0",
     "mocha": "^7.2.0"
   },
+  
   "type": "module"
 }
