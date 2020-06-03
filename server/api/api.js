@@ -6,42 +6,63 @@ const { check, validationResult } = require("express-validator");
 const Router = express.Router;
 const database = require("../database/database");
 const jwt = require("jsonwebtoken");
-
 const { basicAuth, jwtAuth, createJWT } = require("./auth");
 const createUserInputValidation = require("./users");
 
-const setupV1Routes = apiRouter => {
-	// Controller Functions
-	function findAllPosts(request, response) {
-		let allPosts = database.findAllPosts();
-		response.send(allPosts);
-	}
+const setupV1Routes = (apiRouter) => {
+  // Controller Functions
 
-	function addNewPost(request, response) {
-		let post = new Post(request.body);
-		console.log("saving post", request.body);
-		// mongo.addPost(post);
-		// await post.save();
-		database.addPost(request.body);
-		response.sendStatus(200);
-	}
+  async function findAllPosts(request, response) {
+    try {
+      const posts = await Post.find().sort({ date: -1 });
+      response.json(posts);
+    } catch (err) {
+      console.error(err.message);
+      response.status(500).send("Server Error");
+    }
+    //   let allPosts = database.findAllPosts();
+    //   response.send(allPosts);
+  }
 
-	function clearAllPosts(request, response) {
-		database.clearAllPosts();
-		response.sendStatus(200);
-	}
+  async function addNewPost(request, response) {
+    let post = new Post(request.body);
+    console.log("saving post", request.body);
+    await post.save();
+    response.sendStatus(200);
+  }
 
-	function deletePost(request, response) {
-		database.deletePost(request.body.uid);
-		response.sendStatus(200);
-	}
+  async function clearAllPosts(request, response) {
+    try {
+      const posts = await Post.find().remove({});
+      response.json(posts);
+      response.sendStatus(200);
+      console.log(posts);
+    } catch (err) {
+      console.error(err.message);
 
-	function updatePost(request, response) {
-		database.updatePost(request.body);
-		response.sendStatus(200);
-	}
+      res.status(500).send("Server Error");
+    }
+  }
 
-	function createUserDB(request, response) {
+  async function deletePost(request, response) {
+    try {
+      const post = await Post.find({ uid: request.body.uid }).remove({});
+      response.json(post);
+      response.sendStatus(200);
+      // await post.remove();
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send("Server Error");
+    }
+  }
+
+  function updatePost(request, response) {
+    database.updatePost(request.body);
+    response.sendStatus(200);
+  }
+
+  	function createUserDB(request, response) {
 		let message = createUserInputValidation(request.body);
 		response.status(200).json({ message: message });
 	}

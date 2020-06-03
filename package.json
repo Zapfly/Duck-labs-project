@@ -7,7 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "Duck-labs-project": "npm start --prefix Duck-labs-project",
+    "heroku-postbuild": "NPM-CONFIG_PRODUCTION=false --prefix Duck-labs-project && npm run build --prefix Duck-labs-project",
+    "start": "cd server && npm start"
   },
   "repository": {
     "type": "git",
