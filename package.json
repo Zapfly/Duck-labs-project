@@ -7,9 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "test",
-    "start": "cd server && npm start",
-    "heroku-postbuild": "ng build"
+    "test": "test"
+ 
   },
   "repository": {
     "type": "git",

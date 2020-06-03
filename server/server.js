@@ -15,16 +15,15 @@ app.use("/users", users);
 
 app.use(express.json());
 app.use("/api", api);
-app.use("/", express.static("../src"));
+// app.use("/", express.static("../src"));
 
 //Server static assets in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("duck-labs-project"));
 
-  app.get("*", (request, response) => {
-    response.sendFile(path.resolve(__dirname, "build", "index.html"));
-  });
-}
+app.use(express.static(__dirname, "../src"));
+
+app.get("*", (request, response) => {
+  response.render("index");
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening at ${port}`));
