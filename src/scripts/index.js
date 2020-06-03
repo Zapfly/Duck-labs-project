@@ -138,7 +138,27 @@ function getPostFromForm(
     author: authorName,
     postDate: inputDate,
     uid: id,
+    comments: []
   };
+}
+
+function createCommentFromForm(
+  postId,
+  authorName = "Anonymous",
+  dateTime = String(new Date().getTime()),
+  ) {
+  if (inputHasSomeText(`commentInput${postId}`)) {
+    return {
+      commentId : `comment${postId}`,
+      avatar :`https://robohash.org/${postId}?set=set2&size=180x180`,
+      date : dateTime,
+      author : authorName
+    } 
+  } else {
+    console.log("post does not have text");
+
+
+  }
 }
 
 function postButtonPressed() {
