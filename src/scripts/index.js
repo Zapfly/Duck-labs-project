@@ -90,7 +90,7 @@ function addPostToPage(post) {
 			</div>
 			
 			<div class='comment-area'>
-				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..."/>
+				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onkeypress="pressEnterKey('commentInput${post.uid}', commentKeystroke)"/>
 			</div>
 		</div>
 		`;
@@ -142,23 +142,28 @@ function getPostFromForm(
   };
 }
 
+
 function createCommentFromForm(
   postId,
   authorName = "Anonymous",
   dateTime = String(new Date().getTime()),
   ) {
-  if (inputHasSomeText(`commentInput${postId}`)) {
-    return {
-      commentId : `comment${postId}`,
-      avatar :`https://robohash.org/${postId}?set=set2&size=180x180`,
-      date : dateTime,
-      author : authorName
-    } 
-  } else {
-    console.log("post does not have text");
-
-
+    if (inputHasSomeText(`commentInput${postId}`)) {
+      return {
+        commentId : `comment${postId}`,
+        avatar :`https://robohash.org/${postId}?set=set2&size=180x180`,
+        date : dateTime,
+        author : authorName
+      } 
+    } else {
+      console.log("post does not have text");
+    }
   }
+  
+function commentKeystroke(id) {
+  let commentToAdd = createCommentFromForm(id)
+  console.log(commentToAdd.author)
+  console.log('hello from commentKeystroke')
 }
 
 function postButtonPressed() {
