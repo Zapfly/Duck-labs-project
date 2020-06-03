@@ -19,7 +19,7 @@ app.use("/api", api);
 
 //Server static assets in production
 
-app.use(express.static("src"));
+app.use(express.static("../src"));
 
 app.get("*", (request, response) => {
   response.sendFile(path.join(__dirname, "index.html"));
