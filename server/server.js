@@ -19,10 +19,10 @@ app.use("/api", api);
 
 //Server static assets in production
 
-app.use(express.static(__dirname, "../src"));
+app.use(express.static("src"));
 
 app.get("*", (request, response) => {
-  response.render("index");
+  response.sendFile(path.join(__dirname, "index.html"));
 });
 
 const port = process.env.PORT || 3000;
