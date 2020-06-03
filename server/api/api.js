@@ -56,9 +56,22 @@ const setupV1Routes = (apiRouter) => {
     }
   }
 
-  function updatePost(request, response) {
-    database.updatePost(request.body);
-    response.sendStatus(200);
+  async function updatePost(request, response) {
+    try {
+      const post = await Post.find({ uid: request.body.uid }).update({
+        uid: request.body.uid,
+        postText: request.body.postText,
+        author: request.body.author,
+        postDate: request.body.postDate,
+        
+      });
+      response.sendStatus(200);
+
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send("Server Error");
+    }
   }
 
   // const textParser = bodyParser.json()
