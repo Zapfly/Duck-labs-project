@@ -1,5 +1,4 @@
-//const jquery = require("./jquery")
-// var commentFunctions = require("./comments");
+
 
 function add(a, b) {
   return a + b;
@@ -183,6 +182,12 @@ function deleteButtonPressed(id) {
   deleteFromServer(data);
 }
 
+function createUserButtonPressed() {
+	let uname = getInputValue(`createUserInput`);
+	let pword = getInputValue(`createPassInput`);
+	createUser({ username: uname, password: pword });
+}
+
 function saveChangesButtonPressed(id) {
   let newText = getInputValue(`textArea${id}`);
   let date = $("#" + `date${id}`).text();
@@ -210,6 +215,20 @@ function updatePagePosts(posts) {
 
 //---- server interaction
 
+function createUser(user) {
+	console.log("hey");
+	$.ajax({
+		url: "/api/v1/createUser",
+		type: "POST",
+		data: JSON.stringify(user),
+		contentType: "application/json; charset=utf-8",
+		success: function(message) {
+			console.log("message from idex");
+			console.log(message);
+		}
+	});
+}
+
 //WORK IN PROGRESS
 function userLogin(username, password) {
   $.ajax({
@@ -225,23 +244,25 @@ function userLogin(username, password) {
 }
 
 function postPostsToServerAndUpdatePage(post) {
-  $.ajax({
-    url: "/api/v1/addPost",
-    type: "POST",
-    data: JSON.stringify(post),
-    contentType: "application/json; charset=utf-8",
-    // beforeSend: function (xhr) {
-    //   //Include the bearer token in header
-    //   xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-    // },
-    success: function () {
-      console.log("In post callback");
-      updatePostsFromServer();
-    },
-    fail: function (error) {
-      // what do we do here?
-    },
-  });
+
+	$.ajax({
+		url: "/api/v1/addPost",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		// beforeSend: function(xhr) {
+		// 	//Include the bearer token in header
+		// 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+		// },
+		success: function() {
+			console.log("In post callback");
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			// what do we do here?
+		}
+	});
+
 }
 
 function updatePostsFromServer() {
