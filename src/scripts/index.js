@@ -1,5 +1,3 @@
-
-
 function add(a, b) {
   return a + b;
 }
@@ -183,9 +181,11 @@ function deleteButtonPressed(id) {
 }
 
 function createUserButtonPressed() {
-	let uname = getInputValue(`createUserInput`);
-	let pword = getInputValue(`createPassInput`);
-	createUser({ username: uname, password: pword });
+  let uname = getInputValue(`createUserInput`);
+  let pword = getInputValue(`createPassInput`);
+  let email = getInputValue(`createEmailInput`);
+
+  createUser({ username: uname, password: pword, email: email });
 }
 
 function saveChangesButtonPressed(id) {
@@ -215,18 +215,22 @@ function updatePagePosts(posts) {
 
 //---- server interaction
 
-function createUser(user) {
-	console.log("hey");
-	$.ajax({
-		url: "/api/v1/createUser",
-		type: "POST",
-		data: JSON.stringify(user),
-		contentType: "application/json; charset=utf-8",
-		success: function(message) {
-			console.log("message from idex");
-			console.log(message);
-		}
-	});
+function createUser(userObject) {
+  console.log("hey");
+  $.ajax({
+    url: "/users",
+    type: "POST",
+    data: JSON.stringify(userObject),
+    contentType: "application/json; charset=utf-8",
+    success: function (message) {
+      console.log("message from idex");
+      console.log(message);
+    },
+    fail: function (errors) {
+      console.log("error");
+      // what do we do here?
+    },
+  });
 }
 
 //WORK IN PROGRESS
@@ -244,25 +248,23 @@ function userLogin(username, password) {
 }
 
 function postPostsToServerAndUpdatePage(post) {
-
-	$.ajax({
-		url: "/api/v1/addPost",
-		type: "POST",
-		data: JSON.stringify(post),
-		contentType: "application/json; charset=utf-8",
-		// beforeSend: function(xhr) {
-		// 	//Include the bearer token in header
-		// 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-		// },
-		success: function() {
-			console.log("In post callback");
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			// what do we do here?
-		}
-	});
-
+  $.ajax({
+    url: "/api/v1/addPost",
+    type: "POST",
+    data: JSON.stringify(post),
+    contentType: "application/json; charset=utf-8",
+    // beforeSend: function(xhr) {
+    // 	//Include the bearer token in header
+    // 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+    // },
+    success: function () {
+      console.log("In post callback");
+      updatePostsFromServer();
+    },
+    fail: function (error) {
+      // what do we do here?
+    },
+  });
 }
 
 function updatePostsFromServer() {
