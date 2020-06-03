@@ -183,7 +183,9 @@ function deleteButtonPressed(id) {
 function createUserButtonPressed() {
   let uname = getInputValue(`createUserInput`);
   let pword = getInputValue(`createPassInput`);
-  createUser({ username: uname, password: pword });
+  let email = getInputValue(`createEmailInput`);
+
+  createUser({ username: uname, password: pword, email: email });
 }
 
 function saveChangesButtonPressed(id) {
@@ -213,16 +215,20 @@ function updatePagePosts(posts) {
 
 //---- server interaction
 
-function createUser(user) {
+function createUser(userObject) {
   console.log("hey");
   $.ajax({
     url: "/users",
     type: "POST",
-    data: JSON.stringify(user),
+    data: JSON.stringify(userObject),
     contentType: "application/json; charset=utf-8",
     success: function (message) {
       console.log("message from idex");
       console.log(message);
+    },
+    fail: function (errors) {
+      console.log("error");
+      // what do we do here?
     },
   });
 }

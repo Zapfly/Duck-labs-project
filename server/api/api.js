@@ -7,7 +7,6 @@ const Router = express.Router;
 const database = require("../database/database");
 const jwt = require("jsonwebtoken");
 const { basicAuth, jwtAuth, createJWT } = require("./auth");
-const createUserInputValidation = require("./users");
 
 const setupV1Routes = (apiRouter) => {
   // Controller Functions
@@ -61,11 +60,6 @@ const setupV1Routes = (apiRouter) => {
     database.updatePost(request.body);
     response.sendStatus(200);
   }
-
-  // 	function createUserDB(request, response) {
-  // 	let message = createUserInputValidation(request.body);
-  // 	response.status(200).json({ message: message });
-  // }
 
   // const textParser = bodyParser.json()
 
