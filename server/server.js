@@ -19,10 +19,10 @@ app.use("/", express.static("../src"));
 
 // //Server static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../src/build"));
+  app.use(express.static("../src"));
 
   app.get("*", (request, response) => {
-    response.sendFile(path.join(__dirname, "src", "index.html"));
+    response.sendFile(path.join(__dirname, "index.html"));
   });
 }
 
