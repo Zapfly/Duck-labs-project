@@ -38,7 +38,6 @@ const setupV1Routes = (apiRouter) => {
       console.log(posts);
     } catch (err) {
       console.error(err.message);
-
       res.status(500).send("Server Error");
     }
   }
@@ -79,8 +78,8 @@ const setupV1Routes = (apiRouter) => {
   // Routing
   const v1Router = Router();
   v1Router.get("/posts", findAllPosts);
-  v1Router.post("/addPost", addNewPost);
-  //v1Router.post("/addPost", jwtAuth, addNewPost);
+  // v1Router.post("/addPost", addNewPost);
+  v1Router.post("/addPost", jwtAuth, addNewPost);
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
   v1Router.post("/updatePost", updatePost);

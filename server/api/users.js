@@ -28,13 +28,10 @@ router.post(
 
     try {
       let user = await User.findOne({ email });
-
       if (user) {
-        res.status(400).json({
-          errors: [{ msg: "User already exists" }],
-        });
-
-        return;
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "User already exists" }] });
       }
       //Get users gravatar
       //   const avatar = gravatar.url(email, {
@@ -57,22 +54,22 @@ router.post(
 
       await user.save();
 
-      //   //Return jsonwebtoken
-      //   const payload = {
-      //     user: {
-      //       id: user.id,
-      //     },
-      //   };
+      //Return jsonwebtoken
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
 
-      //   jwt.sign(
-      //     payload,
-      //     config.get("jwtSecret"),
-      //     { expiresIn: 360000 },
-      //     (err, token) => {
-      //       if (err) throw err;
-      //       res.json({ token });
-      //     }
-      //   );
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       res.status(500).send("Server error");
     }
