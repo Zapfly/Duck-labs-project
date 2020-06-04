@@ -202,9 +202,11 @@ function saveChangesButtonPressed(id) {
   updateOnePost(newPost);
 }
 
-// function loginButtonPressed(id) {
-
-// }
+function loginButtonPressed() {
+  let pword = getInputValue(`loginPassInput`);
+  let email = getInputValue(`loginEmailInput`);
+  userLogin({ password: pword, email: email });
+}
 
 function updatePagePosts(posts) {
   cleanOutElement("newsFeed");
@@ -214,6 +216,7 @@ function updatePagePosts(posts) {
 }
 
 //---- server interaction
+let token = "";
 
 function createUser(userObject) {
   console.log("hey");
@@ -222,27 +225,30 @@ function createUser(userObject) {
     type: "POST",
     data: JSON.stringify(userObject),
     contentType: "application/json; charset=utf-8",
-    success: function (message) {
-      console.log("message from idex");
-      console.log(message);
+    success: function (data) {
+      console.log("User created");
+      token = data.token;
     },
-    fail: function (errors) {
-      console.log("error");
+    fail: function () {
+      console.log("Fail to create user");
+
       // what do we do here?
     },
   });
 }
 
 //WORK IN PROGRESS
-function userLogin(username, password) {
+function userLogin(userLoginObject) {
+  console.log(userLoginObject);
   $.ajax({
     url: "/api/v1/login",
     type: "POST",
-    headers: {
-      Authorization: `Basic ${btoa("username:password")}`,
-    },
-    success: function () {
-      console.log("Logged in");
+    data: JSON.stringify(userLoginObject),
+    contentType: "application/json; charset=utf-8",
+    success: function (data) {
+      console.log("User logged in");
+      token = data.token;
+      console.log("Authentication pending");
     },
   });
 }
@@ -253,10 +259,9 @@ function postPostsToServerAndUpdatePage(post) {
     type: "POST",
     data: JSON.stringify(post),
     contentType: "application/json; charset=utf-8",
-    // beforeSend: function(xhr) {
-    // 	//Include the bearer token in header
-    // 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-    // },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     success: function () {
       console.log("In post callback");
       updatePostsFromServer();

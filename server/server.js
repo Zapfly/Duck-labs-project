@@ -18,15 +18,13 @@ app.use("/api", api);
 app.use("/", express.static("../src"));
 
 // //Server static assets in production
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("Duck-labs-project"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("src/buid"));
 
-//   app.get("*", (request, response) => {
-//     response.sendFile(
-//       path.resolve(__dirname, "Duck-labs-project", "build", "index.html")
-//     );
-//   });
-// }
+  app.get("*", (request, response) => {
+    response.sendFile(path.resolve(__dirname, "src", "build", "index.html"));
+  });
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening at ${port}`));

@@ -19,16 +19,18 @@
             <input class='search-bar under-construction' placeholder='search bar under construction'>
         </div>
         <div id="profile-info" class="under-construction"> 
-            <button id="postButton" onClick="userLogin('username', 'password')">Log in</button> 
+            <input id='loginEmailInput' type="text" placeholder="Email" value="example@gmail.com" />
+            <input id='loginPassInput'  type="text" placeholder="Password" value="123456"/>
+            <button id="postButton" onClick="loginButtonPressed()">Log in</button> 
             
             <img src="" class="profile-thumbnail under-construction" />
         </div>
     </header>
 
     <div class='create-user-area'>
-            <input id='createUserInput'  type="text" placeholder="Username"/>
-            <input id='createPassInput'  type="text" placeholder="Password"/>
-            <input id='createEmailInput' type="text" placeholder="Email" />
+            <input id='createUserInput'  type="text" placeholder="Username" value="testName"/>
+            <input id='createPassInput'  type="text" placeholder="Password" value="testPassword"/>
+            <input id='createEmailInput' type="text" placeholder="Email" value="testEmail@gmail.com"/>
             <button onclick="createUserButtonPressed()">Sign Up</button>         
     </div>
 
