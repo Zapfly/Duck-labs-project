@@ -1,11 +1,3 @@
-function add(a, b) {
-  return a + b;
-}
-
-function subtract(a, b) {
-  return a - b;
-}
-
 function cleanOutElement(id) {
   $("#" + id).html("");
 }
@@ -89,8 +81,10 @@ function addPostToPage(post) {
 				</button>
 			</div>
 			
-			<div class='comment-area'>
-				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onkeypress="pressEnterKey('commentInput${post.uid}', commentKeystroke)"/>
+      <div class='comment-area'>
+      <div id='commentFeed${post.uid}'> 
+      </ div>
+				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
 			</div>
 		</div>
 		`;
@@ -123,7 +117,8 @@ function editButtonPressed(id, text) {
 function getPostFromForm(
   inputTextId,
   inputDate = String(todaysDateString()),
-  id = String(new Date().getTime())
+  id = String(new Date().getTime()),
+  commentsArray = []
 ) {
   let authorName = "Anonymous";
   if (inputHasSomeText(inputTextId)) {
@@ -138,7 +133,7 @@ function getPostFromForm(
     author: authorName,
     postDate: inputDate,
     uid: id,
-    comments: []
+    comments: commentsArray
   };
 }
 
@@ -146,49 +141,90 @@ function getPostFromForm(
 function createCommentFromForm(
   postId,
   authorName = "Anonymous",
-  dateTime = String(new Date().getTime()),
+  inputDate = String(todaysDateString()),
+  id = String(new Date().getTime()),
   ) {
     if (inputHasSomeText(`commentInput${postId}`)) {
+
+      
       return {
-        commentId : `comment${postId}`,
-        avatar :`https://robohash.org/${postId}?set=set2&size=180x180`,
-        date : dateTime,
-        author : authorName
+        commentId : `comment${id}`,
+        avatar : `https://robohash.org/${postId}?set=set2&size=180x180`,
+        date : inputDate,
+        author : authorName,
+        text: getInputValue(`commentInput${postId}`),
+        parentId: `${postId}`
       } 
     } else {
       console.log("post does not have text");
     }
   }
+
+function createCommentCard(newComment) {
+  // const postUpdate = getPostFromForm(`textArea${postId}`)
   
-function commentKeystroke(id) {
-  let commentToAdd = createCommentFromForm(id)
-  console.log(commentToAdd.author)
-  console.log('hello from commentKeystroke')
+  appendHtml(`commentFeed${newComment.parentId}`, `<div id='${newComment.commentId}' class='comment-card'> </ div>`)
+  appendHtml(`${newComment.commentId}`, `<img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>`)
+  appendHtml(`${newComment.commentId}`, `<div class='comment-date'> ${newComment.date} </div>`)
+  appendHtml(`${newComment.commentId}`, `<div id='' class='comment-author'> ${newComment.author}</div>`)
+  appendHtml(`${newComment.commentId}`, `<div id='' class='comment-text'> ${newComment.text}</div>`)
 }
 
-function postButtonPressed() {
-  if (inputHasSomeText("statusInputField")) {
-    let postToAdd = getPostFromForm("statusInputField");
+function createCommentArray(id) {
+  console.log('hello from createCommentArray')
+  let commentArray = []
+  $(`#${id}`).children().each(function (i) {
+    let arrayUnit = []
+    if (i == 0) {
+      return
+    }else {
+
+      console.log(i)
+      $(this).children().each(function (i) {
+        arrayUnit.push($(this).text())
+      })
+    }
+
+    let avatarId = $(`#img${$(this).attr('id')}`)
+    
+    let arrayObj = {
+      commentId : `${$(this).attr('id')}`,
+      avatar : avatarId.attr('src'),
+      date : arrayUnit[1],
+      author : arrayUnit[2],
+      text: arrayUnit[3],
+      parentId: `${id}`      
+    }
+    commentArray.push(arrayObj)
+  })
+  console.log(commentArray)
+
+  return commentArray
+}
+
+function commentKeystroke(postUID) {
+  let newText = getInputValue(`textArea${postUID}`);
+  let date = $("#" + `date${postUID}`).text();
+
+  let commentToAdd = createCommentFromForm(postUID)
+  createCommentCard(commentToAdd)
+  // updateOnePostWithComment(commentToAdd)
+  let postDate = getInputValue(`date${postUID}`)
+  let commentsArray =  createCommentArray(`commentFeed${postUID}`)
+
+  getPostFromForm(`textArea${postUID}`, postDate, postUID, commentsArray)
+}
+
+function postButtonPressed(id) {
+  if (inputHasSomeText(id)) {
+    let postToAdd = getPostFromForm(id);
     postPostsToServerAndUpdatePage(postToAdd);
-    clearInputField("statusInputField");
+    cleanOutElement(id);
   } else {
     return "Please Add a Message";
   }
 }
 
-function clearInputField(id) {
-  $("#" + id).val("");
-}
-
-function pressEnterKey(id, actionFunction) {
-  $("#" + id).keyup(function (e) {
-    let code = e.which;
-    if (code == 13) {
-      e.preventDefault();
-      actionFunction();
-    }
-  });
-}
 
 function commentButtonPressed(cardId) {
   let id = String(cardId);
@@ -333,6 +369,28 @@ function deleteFromServer(post) {
     },
   });
 }
+
+function updateOnePostWithComment(post) {
+  $.ajax({
+    url: "/api/v1/addComment",
+    type: "POST",
+    data: JSON.stringify(post),
+    contentType: "application/json; charset=utf-8",
+    success: function () {
+      console.log(`message ${post.uid} has been updated`);
+
+      updatePostsFromServer();
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+}
+
+$(document).ready(function () {
+  updatePostsFromServer();
+});
+
 
 function updateOnePost(post) {
   $.ajax({

@@ -74,6 +74,24 @@ const setupV1Routes = (apiRouter) => {
     }
   }
 
+  async function addCommentToPost(request, response) {
+    try {
+      const post = await Post.find({ uid: request.body.postId }).update({
+        uid: request.body.uid,
+        postText: request.body.postText,
+        author: request.body.author,
+        postDate: request.body.postDate,
+        comment: request.body.comments
+
+      })
+
+    } catch {
+
+    }
+  }
+
+
+
   // const textParser = bodyParser.json()
 
   // Routing
@@ -84,6 +102,7 @@ const setupV1Routes = (apiRouter) => {
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
   v1Router.post("/updatePost", updatePost);
+  v1Router.post("/addComment", addCommentToPost)
   v1Router.post("/login", basicAuth, createJWT);
   // v1Router.post("/createUser", createUserDB);
 
