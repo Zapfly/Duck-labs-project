@@ -229,11 +229,7 @@ function createUser(userObject) {
       console.log("User created");
       token = data.token;
     },
-    fail: function () {
-      console.log("Fail to create user");
-
-      // what do we do here?
-    },
+    fail: function () {},
   });
 }
 
