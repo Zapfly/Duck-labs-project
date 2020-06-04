@@ -44,14 +44,11 @@ const setupV1Routes = (apiRouter) => {
 
   async function deletePost(request, response) {
     try {
-      const post = await Post.find({ uid: request.body.uid }).remove({});
-      response.json(post);
-      response.sendStatus(200);
-      // await post.remove();
+      const post = await Post.find({ uid: request.body.uid }).deleteOne({});
+      response.status(200).json(post);
     } catch (err) {
       console.error(err.message);
-
-      res.status(500).send("Server Error");
+      response.status(500).send("Server Error");
     }
   }
 
@@ -68,7 +65,7 @@ const setupV1Routes = (apiRouter) => {
   // v1Router.post("/addPost", addNewPost);
   v1Router.post("/addPost", jwtAuth, addNewPost);
   v1Router.post("/clear", clearAllPosts);
-  v1Router.post("/delete", deletePost);
+  v1Router.post("/delete", jwtAuth, deletePost);
   v1Router.post("/updatePost", updatePost);
   v1Router.post("/login", basicAuth, createJWT);
   // v1Router.post("/createUser", createUserDB);

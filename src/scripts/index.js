@@ -244,7 +244,7 @@ function userLogin(userLoginObject) {
     success: function (data) {
       console.log("User logged in");
       token = data.token;
-      console.log("Authentication pending");
+      console.log(token);
     },
   });
 }
@@ -299,6 +299,9 @@ function deleteFromServer(post) {
     type: "POST",
     data: JSON.stringify(post),
     contentType: "application/json; charset=utf-8",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     success: function () {
       console.log("message has been deleted");
 
@@ -330,8 +333,3 @@ function updateOnePost(post) {
 $(document).ready(function () {
   updatePostsFromServer();
 });
-
-// module.exports = {
-// 	add: add,
-// 	subtract: subtract
-// };
