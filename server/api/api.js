@@ -6,7 +6,7 @@ const { check, validationResult } = require("express-validator");
 const Router = express.Router;
 const database = require("../database/database");
 const jwt = require("jsonwebtoken");
-const { basicAuth, jwtAuth, createJWT } = require("./auth");
+const { basicAuth, createJWT } = require("./auth");
 
 const setupV1Routes = (apiRouter) => {
   // Controller Functions
@@ -38,7 +38,6 @@ const setupV1Routes = (apiRouter) => {
       console.log(posts);
     } catch (err) {
       console.error(err.message);
-
       res.status(500).send("Server Error");
     }
   }
@@ -71,7 +70,7 @@ const setupV1Routes = (apiRouter) => {
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
   v1Router.post("/updatePost", updatePost);
-  v1Router.post("/login", basicAuth, createJWT);
+  v1Router.post("/login", basicAuth);
   // v1Router.post("/createUser", createUserDB);
 
   apiRouter.use("/v1", v1Router);
