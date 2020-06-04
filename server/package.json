@@ -6,8 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node server.js",
-    "server": "nodemon server",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix src && npm run build --prefix src"
+    "server": "nodemon server"
   },
   "author": "",
   "license": "ISC",
