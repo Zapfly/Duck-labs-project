@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("../src/build"));
 
   app.get("*", (request, response) => {
-    response.sendFile(path.resolve(__dirname, "src", "build", "index.html"));
+    response.sendFile(path.join(__dirname, "index.html"));
   });
 }
 
