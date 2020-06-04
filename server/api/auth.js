@@ -7,6 +7,7 @@ const Router = express.Router;
 const database = require("../database/database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
 async function saltHash(based64Credentials) {
   const salt = await bcrypt.genSalt(10);
@@ -48,35 +49,44 @@ async function basicAuth(request, response, next) {
       });
     } else {
       console.log("user checked from basic auth");
-      createJWT(user);
+      next();
     }
   }
 }
 
-// function jwtAuth(request, response, next) {
-//   // check for jwt auth header
-//   const noAuth = !request.headers.authorization;
-//   if (noAuth || request.headers.authorization.indexOf("Bearer ") === -1) {
-//     return response
-//       .status(401)
-//       .json({ message: "Missing Authorization Header" });
-//   }
+function jwtAuth(request, response, next) {
+  console.log("from jwt function");
+  console.log(request.body);
+  // check for jwt auth header
+  const noAuth = !request.headers.authorization;
 
-//   // pull out the jwt
-//   const token = request.headers.authorization.split(" ")[1];
+  console.log(request.headers.authorization);
+  if (noAuth || request.headers.authorization.indexOf("Bearer ") === -1) {
+    console.log("No same token");
+    return response
+      .status(401)
+      .json({ message: "Missing Authorization Header" });
+  }
 
-//   // verify the jwt
-//   const payload = jwt.verify(token, config.get("jwtSecret"));
-//   const user = database.getUserById(payload.userId);
-//   if (user) {
-//     request.user = user;
-//     return next();
-//   } else {
-//     return response.status(401).json({
-//       message: "JWT Authentication failed: Invalid username or password.",
-//     });
-//   }
-// }
+  // pull out the jwt
+  const token = request.headers.authorization.split(" ")[1];
+
+  // verify the jwt
+  const payload = jwt.verify(token, config.get("jwtSecret"));
+
+  console.log(payload.user.id);
+
+  const user = User.findById(payload.user.id);
+  if (user) {
+    console.log("you are the user");
+    request.user = user;
+    return next();
+  } else {
+    return response.status(401).json({
+      message: "JWT Authentication failed: Invalid username or password.",
+    });
+  }
+}
 
 // function verifyUserToken(request, response, next) {
 //   //Get token from header
@@ -101,8 +111,8 @@ async function basicAuth(request, response, next) {
 
 function createJWT(request, response) {
   console.log("from create jwt");
+  console.log(request.header);
 
-  console.log(user);
   // create JWT and send it back
   const payload = {
     user: {
@@ -123,6 +133,6 @@ function createJWT(request, response) {
 
 module.exports = {
   basicAuth,
-  // jwtAuth,
+  jwtAuth,
   createJWT,
 };
