@@ -17,14 +17,14 @@ app.use(express.json());
 app.use("/api", api);
 app.use("/", express.static("../src"));
 
-// //Server static assets in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../src"));
+// // //Server static assets in production
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("src/build"));
 
-  app.get("*", (request, response) => {
-    response.sendFile(path.join(__dirname, "index.html"));
-  });
-}
+//   app.get("*", (request, response) => {
+//     response.sendFile(path.resolve(__dirname, "src", "build", "index.html"));
+//   });
+// }
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening at ${port}`));
