@@ -72,21 +72,18 @@ function addPostToPage(post) {
 	 				<button id="saveChangesButton${post.uid}" onclick="saveChangesButtonPressed('${post.uid}')">Save</button>
 	 			</div>
 		
-				<div class="post-footer">
-				<button class='button-with-image under-construction' id='likeButton' onClick="likeButtonPressed()"> &#128077;
-					Like
-				</button>
-				<button class='button-with-image under-construction' id='commentButton${post.uid}' onClick="commentButtonPressed(${post.uid})">
-					&#128172; Comment
-				</button>
+				<div class="post-footer">			
+					<button class='button-with-image comment-button' id='commentButton${post.uid}' onClick="commentButtonPressed(${post.uid})">
+						&#128172; Comments
+					</button>
+				</div>
+				
+				<div class='comment-area'>
+					<div class="comment-card-container" id='commentFeed${post.uid}'> 
+					</div>
+				</div>
+					<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
 			</div>
-			
-      <div class='comment-area'>
-        <div id='commentFeed${post.uid}'> 
-        </div>
-        </div>
-        <input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
-		</div>
 		`;
 
 		appendHtml("newsFeed", postHtml);
@@ -181,7 +178,7 @@ let testComment = {
 
 function createCommentCard(newComment) {
 	let commentCard = `
-  <div id='${newComment.commentId}' class='comment-card'>
+  <div id='${newComment.commentId}' class='comment-card card'>
       <img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>
       <div id='author${newComment.commentId}' class='comment-author'> ${newComment.author}</div>
       </br>
@@ -231,6 +228,8 @@ function commentKeystroke(postUID) {
 	);
 	console.log(newPost.comments);
 	updateOnePost(newPost);
+	commentButtonPressed(postUID)
+
 }
 
 function postButtonPressed(id) {
@@ -245,7 +244,9 @@ function postButtonPressed(id) {
 
 function commentButtonPressed(cardId) {
 	let id = String(cardId);
+	$("#commentInput" + id).toggle();
 	$("#commentInput" + id).focus();
+	$("#commentFeed" + id).toggle();
 }
 
 function clearNewsFeedButtonPressed() {

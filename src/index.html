@@ -15,12 +15,7 @@
 <body>
     <header>
         <img class="fakebook-logo" src="./FAKEbook.png" alt="Fakebook Logo" />
-        <div id=searchBarContainer>
-            <input class='search-bar under-construction' placeholder='search bar under construction'>
-        </div>
-       
-        
-      
+        <span id="title">Fakebook</span>
     </header>
 
 
@@ -36,9 +31,8 @@
             <input class="user-input card" id='loginPassInput'  type="text" placeholder="Password" value="123456"/><br/>
             <input class="user-input card" id="loginButton" type="button" value="Log In" onClick="loginButtonPressed()"/>    
             <br>
-            
-            <span id="orLabel">or</span>
-            <button class="card" id="signUpPageButton" onclick="switchVisibleElements('userAreaButtons','createUser')">Sign Up</button>
+            <div class="or-label"><span>or</span></div>
+            <button class="card" id="signUpPageButton" onclick="switchVisibleElements('loginUser','createUser')">Sign Up</button>
         
         </div>
         <div class="create-user card" id="createUser">
@@ -46,10 +40,11 @@
             <input class="card user-input" id='createPassInput'  type="text" placeholder="Password" value="testPassword"/><br/>
             <input class="card user-input" id='createEmailInput' type="text" placeholder="Email" value="testEmail@gmail.com"/><br/>
             <input class="card user-input" id='signUpButton' type="button" value="Sign Up" onclick="createUserButtonPressed()"/>
-        </div>
-            
-            
-       
+            <br>
+            <div class="or-label"><span>or</span></div>
+            <button class=" card" id="loginPageButton" onclick="switchVisibleElements('createUser', 'loginUser')">Log in</button>
+        
+        </div>   
     </div>
 
 
@@ -59,10 +54,7 @@
             <img class='profile-thumbnail' src="" />
             <input id='statusInputField'  type="text" placeholder="What's on your mind?" onchange="postButtonPressed('statusInputField')"/>
             <div class="button-container"> 
-                <button id="postButton" onClick="postButtonPressed('statusInputField')">Post</button> 
-                <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;
-                    Photo/Video
-                </button> 
+                <button id="postButton" onClick="postButtonPressed('statusInputField')">Post</button>
             </div>
         </div>         
         
@@ -70,6 +62,6 @@
     <div id="newsFeed">
         <!-- posts will go here-->
     </div>
-    <div> <button id="clearFeedButton" onClick='clearNewsFeedButtonPressed()'>Clear News Feed</button>   
+    
 </body>
 </html>
