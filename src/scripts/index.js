@@ -301,6 +301,7 @@ function updatePagePosts(posts) {
 
 function loadUserMedia(idToHide, idToShow) {
 	switchVisibleElements(idToHide, idToShow);
+	updatePostsFromServer();
 }
 
 //---- server interaction
@@ -335,7 +336,7 @@ function userLogin(userLoginObject, idToHide, idToShow) {
 			token = data.token;
 			console.log(token);
 			loadUserMedia(idToHide, idToShow);
-			updatePostsFromServer();
+			
 		}
 	});
 }
