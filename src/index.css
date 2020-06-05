@@ -11,7 +11,6 @@ textarea {
 
 body {
 	display: grid;
-	grid-template-rows: 1fr 1fr auto;
 	grid-template-columns: 1fr 2fr 1fr;
 	background-color: #ecf3ff;
 }
@@ -50,6 +49,7 @@ header {
 	background-color: #4267b2;
 	color: white;
 	font-family: "Titillium Web", sans-serif;
+	min-height: 50px;
 	height: fit-content;
 	grid-column-start: 1;
 	grid-column-end: -1;
@@ -59,30 +59,90 @@ header {
 	height: 100%;
 	border-radius: 5px;
 }
-
-#searchBarContainer {
-	width: 100%;
+.header-button {
+	display: flex;
 }
 
-/* .search-bar {
-} */
-
+#title {
+	font-size: 2em;
+}
 #profile-info {
 	grid-column-start: 5;
 }
 
-/* Status input div*/
+.card {
+	border: 4px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-left: 1px solid lightgray;
+	border-radius: 3px;
+	background-color: white;
+	padding: 5px;
+}
 
-.status-input {
+/* Login user div */
+
+#user-area {
+	width: 98%;
+	margin: 20% 2%;
+	grid-column-start: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: stretch;
+}
+.or-label {
+	text-align: center;
+	width: 100%;
+
+	
+}
+.or-label:before,
+.or-label:after {
+	content: "";
+	display: inline-block;
+	width: 300px;
+	height: 1px;
+	background: #000;
+	left: 0;
+	top: 50%;
+	z-index: -10;
+}
+
+.user-input {
+	width: 80%;
+	margin-left: 10%;
+}
+
+#loginPageButton,
+#signUpPageButton {
+	width: 100%;
+}
+#loginButton,
+#signUpButton {
+	width: 84%;
+	margin-top: 10px;
+	background-color: rgb(64, 128, 240);
+}
+
+#status-input,
+.create-user,
+.login-user,
+.comment-card-container {
+	display: none;
+	padding: 10px;
+}
+/* Status input div*/
+#status-input {
+	grid-column-start: 2;
+	margin-top: 20%;
+}
+.create-status-text {
+	grid-column-start: 2;
 	display: grid;
 	grid-template-rows: auto auto auto;
 	grid-template-columns: 5fr 1fr;
 	grid-column-start: 2;
 	margin: 5px;
-}
-.create-status-text {
-	grid-column-start: 1;
-	grid-column-end: 3;
 }
 
 #statusInputField {
@@ -107,21 +167,16 @@ header {
 	flex-direction: row;
 }
 
+#postButton {
+	width: 40%;
+}
+
 /*Newsfeed and its cards*/
 
 #newsFeed {
 	display: grid;
-	grid-row-start: 3;
+	grid-row-start: 4;
 	grid-column-start: 2;
-}
-
-.card {
-	border: 4px solid lightgray;
-	border-top: 1px solid lightgray;
-	border-left: 1px solid lightgray;
-	border-radius: 3px;
-	background-color: white;
-	padding: 5px;
 }
 
 .post-card {
@@ -152,15 +207,9 @@ header {
 .post-footer {
 	grid-column-start: 1;
 	grid-column-end: 3;
-	display: flex;
+	display: flex;	
 	flex-direction: row;
-	justify-content: space-evenly;
-}
-
-.post-footer button {
-	margin-top: 2%;
-	width: 50%;
-	justify-content: center;
+	justify-content: flex-end;
 }
 
 /* COMMENT AREA */
@@ -170,9 +219,20 @@ header {
 	display: flex;
 }
 .comment-input {
-	width: 100%;
+	display:none;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	width: 96%;
 	margin-top: 2%;
 	margin-bottom: 2%;
+	margin-left: 1%;
+
+}
+.comment-button {
+	width: 40%;
+	margin-right: 2%;
+	justify-content: center;
+	display: grid;
 }
 
 .like-button {
@@ -218,8 +278,9 @@ header {
 	border-left: 1px solid lightgray;
 	border-radius: 8px;
 	padding: 5px;
-
-	/* z-index: 1; */
+}
+.comment-card-container {
+	width: 96%;
 }
 
 .show {
@@ -228,4 +289,9 @@ header {
 
 .drop-down-item:hover {
 	background-color: #4267b2;
+}
+
+.comment-card {
+	width: 100%
+
 }

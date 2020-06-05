@@ -17,14 +17,12 @@ app.use(express.json());
 app.use("/api", api);
 app.use("/", express.static("../src"));
 
-// //Server static assets in production
+// // //Server static assets in production
 // if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("Duck-labs-project"));
+//   app.use(express.static("src/build"));
 
 //   app.get("*", (request, response) => {
-//     response.sendFile(
-//       path.resolve(__dirname, "Duck-labs-project", "build", "index.html")
-//     );
+//     response.sendFile(path.resolve(__dirname, "src", "build", "index.html"));
 //   });
 // }
 

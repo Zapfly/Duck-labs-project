@@ -1,50 +1,50 @@
 const express = require("express");
-const mongo = require("../inMongo");
-const Post = require("../models/Posts");
 const config = require("config");
-const { check, validationResult } = require("express-validator");
-const Router = express.Router;
-const database = require("../database/database");
+const NodeCache = require("node-cache");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
-async function saltHash(based64Credentials) {
-	const salt = await bcrypt.genSalt(10);
-	return await bcrypt.hash(based64Credentials, salt);
-}
 
-function basicAuth(request, response, next) {
-	// check for basic auth header
-	const noAuth = !request.headers.authorization;
-	if (noAuth || request.headers.authorization.indexOf("Basic ") === -1) {
-		return response
-			.status(401)
-			.json({ message: "Missing Authorization Header" });
-	}
-	// decode user name and password
-	const base64Credentials = request.headers.authorization.split(" ")[1];
-	const credentials = Buffer.from(base64Credentials, "base64").toString(
-		"ascii"
-	);
-	const [username, password] = credentials.split(":");
 
+//Basic auth is cheching user email and password
+async function basicAuth(request, response, next) {
 	// check username and password against database
-	const user = database.checkUserNameAndPassword(username, password);
-	if (user) {
-		request.user = user;
-		return next();
-	} else {
-		return response.status(401).json({
-			message:
-				"Basic Authentication failed: Invalid username or password."
+	const { email, password } = request.body;
+	const user = await User.findOne({ email });
+	if (!user) {
+		return response.status(400).json({
+			errors: [
+				{ msg: "Authentication failed: Invalid username or password." }
+			]
 		});
+	} else {
+		const isMatch = await bcrypt.compare(password, user.password);
+
+		if (!isMatch) {
+			return resquest.status(400).json({
+				errors: [
+					{
+						msg:
+							"Authentication failed: Invalid username or password."
+					}
+				]
+			});
+		} else {
+			next();
+		}
 	}
 }
 
 function jwtAuth(request, response, next) {
+
+
 	// check for jwt auth header
 	const noAuth = !request.headers.authorization;
+
+
 	if (noAuth || request.headers.authorization.indexOf("Bearer ") === -1) {
+	
 		return response
 			.status(401)
 			.json({ message: "Missing Authorization Header" });
@@ -55,8 +55,29 @@ function jwtAuth(request, response, next) {
 
 	// verify the jwt
 	const payload = jwt.verify(token, config.get("jwtSecret"));
-	const user = database.getUserById(payload.userId);
+
+	
+	
+	//check if token was resently check
+
+	// console.log(accessToken)
+	// if (accessToken.get(payload.user.id)) {
+		
+	// 	if (accessToken.get(payload.user.id) == token) {
+	// 		console.log("@@@@ line 70");
+	// 		return next();
+	// 	}
+	// } else {
+	// 	console.log("@@@@ line 73");
+	// 	return response.status(401).json({
+	// 		message: "Your session has expired. Please sign up again."
+	// 	});
+	// }
+
+	const user = User.findById(payload.user.id);
+	
 	if (user) {
+		
 		request.user = user;
 		return next();
 	} else {
@@ -66,12 +87,21 @@ function jwtAuth(request, response, next) {
 	}
 }
 
-function createJWT(request, response) {
+async function createJWT(request, response) {
+	
+	const { email, password } = request.body;
+	const user = await User.findOne({ email });
+
 	// create JWT and send it back
-	const payload = { userId: request.user.id };
+	const payload = {
+		user: {
+			id: user.id
+		}
+	};
 	const token = jwt.sign(payload, config.get("jwtSecret"), {
-		expiresIn: 1440
+		expiresIn: 10800 // expeires in 3 hours
 	});
+	//accessToken.set(user.id, token, 10800);
 
 	return response.json({
 		message: "login success",
