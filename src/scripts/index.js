@@ -1,10 +1,3 @@
-function add(a, b) {
-	return a + b;
-}
-
-function subtract(a, b) {
-	return a - b;
-}
 
 function cleanOutElement(id) {
 	$("#" + id).html("");
@@ -69,7 +62,7 @@ function addPostToPage(post) {
 				<div  class="dropdown-container">
 					<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
 					<div id="list${post.uid}" class="dropdown-content"> 
-						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}', '${post.postText}')"> Edit </div>
+						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}')"> Edit </div>
 							<div class="drop-down-item" onclick="deleteButtonPressed(${post.uid})"> Delete </div>
 						</div>
 					</div>
@@ -89,16 +82,20 @@ function addPostToPage(post) {
 				</button>
 			</div>
 			
-			<div class='comment-area'>
-				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..."/>
-			</div>
+      <div class='comment-area'>
+        <div id='commentFeed${post.uid}'> 
+        </div>
+        </div>
+        <input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
 		</div>
 		`;
+
 		appendHtml("newsFeed", postHtml);
 		hide(`list${post.uid}`);
 		hide(`editArea${post.uid}`);
 		hide(`saveChangesButton${post.uid}`);
 	}
+
 }
 
 function ellipsisButtonPressed(id) {
@@ -110,65 +107,145 @@ function ellipsisButtonPressed(id) {
 	// }
 }
 
-function editButtonPressed(id, text) {
-	let date = getInputValue(`date${id}`);
-	console.log(date);
-	console.log($("#" + id));
 
+function editButtonPressed(id) {
+  let date = getInputValue(`date${id}`);
+  console.log(date);
+  console.log($("#" + id));
 	$("#" + `textArea${id}`).toggle();
 	$("#" + `editArea${id}`).toggle();
 	$("#" + `saveChangesButton${id}`).toggle();
 	hide(`list${id}`);
 }
 
-function getPostFromForm(
-	inputTextId,
-	inputDate = String(todaysDateString()),
-	id = String(new Date().getTime())
-) {
-	let authorName = "Anonymous";
-	if (inputHasSomeText(inputTextId)) {
-		console.log("post has text");
-		authorName = "Anonymous";
-	} else {
-		// authorName = getInputValue(`${inputTextid}`);
-		console.log("post does not have text");
-	}
-	return {
-		postText: getInputValue(inputTextId),
-		author: authorName,
-		postDate: inputDate,
-		uid: id
-	};
-}
-
-function postButtonPressed() {
-	if (inputHasSomeText("statusInputField")) {
-		let postToAdd = getPostFromForm("statusInputField");
-		postPostsToServerAndUpdatePage(postToAdd);
-		clearInputField("statusInputField");
-	} else {
-		return "Please Add a Message";
-	}
-}
-
-function clearInputField(id) {
-	$("#" + id).val("");
-}
 
 function switchVisibleElements(idToHide, idToShow) {
 	$(`#${idToHide}`).toggle();
 	$(`#${idToShow}`).toggle();
 }
 
-function pressEnterKey(id, actionFunction) {
-	$("#" + id).keyup(function(e) {
-		let code = e.which;
-		if (code == 13) {
-			e.preventDefault();
-			actionFunction();
-		}
-	});
+
+function getPostFromForm(
+
+  inputTextId,
+  inputDate = String(todaysDateString()),
+  id = String(new Date().getTime()),
+  commentsArray = []
+) {
+  let authorName = "Anonymous";
+  let inputText 
+  if (inputHasSomeText(inputTextId)) {
+    console.log("post has text");
+    authorName = "Anonymous";
+    inputText = getInputValue(inputTextId)
+  } else if($(`#${inputTextId}`).text() != "" && $(`#${inputTextId}`).text() != null  ) {
+    inputText = $(`#${inputTextId}`).text()
+    console.log("post has text");
+
+  } else{
+    // authorName = getInputValue(`${inputTextid}`);
+    console.log("post does not have text");
+  }
+  return {
+    postText: inputText,
+    author: authorName,
+    postDate: inputDate,
+    uid: id,
+    comments: commentsArray
+  };
+}
+
+
+function createCommentFromForm(
+  postId,
+  authorName = "Anonymous",
+  inputDate = todaysDateString(),
+  id = String(new Date().getTime()),
+  ) {
+    if (inputHasSomeText(`commentInput${postId}`)) {
+      return {
+        commentId : `${id}`,
+        avatar : `https://robohash.org/${id}?set=set2&size=180x180`,
+        date : inputDate,
+        author : authorName,
+        text: getInputValue(`commentInput${postId}`),
+        parentId: `${postId}`
+      } 
+    } else {
+      console.log("post does not have text");
+    }
+  }
+let testComment = {
+  commentId : `12345`,
+  avatar : `https://robohash.org/12345?set=set2&size=180x180`,
+  date : '1991',
+  author : 'Anonymouse',
+  text: 'This is a test Comment',
+  parentId: `commentFeed12345`  
+}
+
+function createCommentCard(newComment) {
+
+  let commentCard = `
+  <div id='${newComment.commentId}' class='comment-card'>
+      <img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>
+      <div id='author${newComment.commentId}' class='comment-author'> ${newComment.author}</div>
+      </br>
+      <div id='date${newComment.commentId}' class='comment-date'> ${newComment.date} </div>
+    <div id='text${newComment.commentId}' class='comment-text'> ${newComment.text}</div>
+  </div>
+  `
+  appendHtml(`commentFeed${newComment.parentId}`, commentCard)
+
+}
+
+function createCommentArray(id) {
+  let commentArray = []
+  $(`#commentFeed${id}`).children().each(function (i) {
+    console.log($(this).attr('id'))
+
+    
+    let collectedId = String($(this).attr('id'))
+    console.log(collectedId)
+    let arrayObj = {
+      commentId : `${collectedId}`,
+      avatar : `https://robohash.org/${collectedId}?set=set2&size=180x180`,
+      date : $("#" + `date${collectedId}`).text(),
+      author : $("#" + `author${collectedId}`).text(),
+      text : $("#" + `text${collectedId}`).text(),
+      parentId : `${id}`      
+    }
+    console.log(arrayObj)
+    commentArray.push(arrayObj)
+    
+    
+
+  })
+  return commentArray
+}
+
+function commentKeystroke(postUID) {
+  let newText = $(`#textArea${postUID}`).text();
+  let date = $("#" + `date${postUID}`).text();
+
+  let commentToAdd = createCommentFromForm(postUID)
+  createCommentCard(commentToAdd)
+  let commentsArray = createCommentArray(`${postUID}`)
+
+  let newPost = getPostFromForm(`textArea${postUID}`, date, postUID, commentsArray)
+  console.log(newPost.comments)
+  updateOnePost(newPost)
+}
+
+function postButtonPressed(id) {
+  if (inputHasSomeText(id)) {
+    let postToAdd = getPostFromForm(id);
+    postPostsToServerAndUpdatePage(postToAdd);
+    cleanOutElement(id);
+  } else {
+    return "Please Add a Message";
+  }
+
 }
 
 function commentButtonPressed(cardId) {
@@ -201,8 +278,9 @@ function saveChangesButtonPressed(id) {
 	let newText = getInputValue(`textArea${id}`);
 	let date = $("#" + `date${id}`).text();
 
-	console.log(newText);
-	// console.log(date)
+
+  console.log(newText);
+
 
 	let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
 	console.log(newPost);
@@ -218,10 +296,15 @@ function loginButtonPressed() {
 }
 
 function updatePagePosts(posts) {
-	cleanOutElement("newsFeed");
-	posts.forEach(function(post) {
-		addPostToPage(post);
-	});
+  cleanOutElement("newsFeed");
+  posts.forEach(function (post) {
+    addPostToPage(post);
+    // console.log(post.comments)
+    post.comments.forEach(function (comment) {
+      createCommentCard(comment)
+    })
+  });
+
 }
 
 function loadUserMedia(idToHide, idToShow) {
@@ -332,23 +415,43 @@ function deleteFromServer(post) {
 	});
 }
 
-function updateOnePost(post) {
-	$.ajax({
-		url: "/api/v1/updatePost",
-		type: "POST",
-		data: JSON.stringify(post),
-		contentType: "application/json; charset=utf-8",
-		success: function() {
-			console.log(`message ${post.uid} has been updated`);
+function updateOnePostWithComment(post) {
+  $.ajax({
+    url: "/api/v1/addComment",
+    type: "POST",
+    data: JSON.stringify(post),
+    contentType: "application/json; charset=utf-8",
+    success: function () {
+      console.log(`message ${post.uid} has been updated`);
 
-			updatePostsFromServer();
-		},
-		fail: function(error) {
-			console.log(error);
-		}
-	});
+      updatePostsFromServer();
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
 }
 
-// $(document).ready(function() {
-// 	updatePostsFromServer();
-// });
+$(document).ready(function () {
+  updatePostsFromServer();
+});
+
+
+function updateOnePost(post) {
+  console.log(post);
+  $.ajax({
+    url: "/api/v1/updatePost",
+    type: "POST",
+    data: JSON.stringify(post),
+    contentType: "application/json; charset=utf-8",
+    success: function () {
+      console.log(`message ${post.uid} has been updated`);
+
+      updatePostsFromServer();
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+}
+

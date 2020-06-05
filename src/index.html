@@ -52,13 +52,14 @@
        
     </div>
 
+
     <div class=" card" id="status-input">
         <div class="create-status-text">
             <span>Create Post</span>
             <img class='profile-thumbnail' src="" />
-            <input id='statusInputField'  type="text" placeholder="What's on your mind?" onkeypress="pressEnterKey('statusInputField', postButtonPressed)"/>
+            <input id='statusInputField'  type="text" placeholder="What's on your mind?" onchange="postButtonPressed('statusInputField')"/>
             <div class="button-container"> 
-                <button id="postButton" onClick="postButtonPressed()">Post</button> 
+                <button id="postButton" onClick="postButtonPressed('statusInputField')">Post</button> 
                 <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;
                     Photo/Video
                 </button> 

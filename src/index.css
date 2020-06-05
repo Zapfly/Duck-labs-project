@@ -222,10 +222,10 @@ header {
 .comment-area {
 	grid-column-start: 1;
 	grid-column-end: 3;
-	display: flex;
+	display: grid;
 }
 .comment-input {
-	width: 100%;
+	width: 98%;
 	margin-top: 2%;
 	margin-bottom: 2%;
 }

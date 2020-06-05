@@ -23,12 +23,14 @@ const setupV1Routes = apiRouter => {
 		//   response.send(allPosts);
 	}
 
+
 	async function addNewPost(request, response) {
 		let post = new Post(request.body);
 		console.log("saving post", request.body);
 		await post.save();
 		response.sendStatus(200);
 	}
+
 
 	async function clearAllPosts(request, response) {
 		try {
@@ -40,6 +42,7 @@ const setupV1Routes = apiRouter => {
 			res.status(500).send("Server Error");
 		}
 	}
+
 
 	async function deletePost(request, response) {
 		try {
@@ -53,14 +56,34 @@ const setupV1Routes = apiRouter => {
 		}
 	}
 
+
   async function updatePost(request, response) {
     try {
       const post = await Post.find({ uid: request.body.uid }).update({
-        uid: request.body.uid,
         postText: request.body.postText,
         author: request.body.author,
         postDate: request.body.postDate,
-        
+        uid: request.body.uid,
+        comments: request.body.comments        
+      });
+      console.log("*******", request.body)
+      response.sendStatus(200);
+
+    } catch (err) {
+      console.error(err.message);
+      response.status(500).send("Server Error");
+    }
+  }
+
+  async function addCommentToPost(request, response) {
+    try {
+      const post = await Post.find({ uid: request.body.postId }).update({
+        // uid: request.body.uid,
+        // postText: request.body.postText,
+        // author: request.body.author,
+        // postDate: request.body.postDate,
+        comments: request.body.comments
+
       });
       response.sendStatus(200);
 
@@ -71,17 +94,14 @@ const setupV1Routes = apiRouter => {
     }
   }
 
-
 	// Routing
 	const v1Router = Router();
 	v1Router.get("/posts", findAllPosts);
-	// v1Router.post("/addPost", addNewPost);
 	v1Router.post("/addPost", jwtAuth, addNewPost);
 	v1Router.post("/clear", jwtAuth, clearAllPosts);
 	v1Router.post("/delete", jwtAuth, deletePost);
 	v1Router.post("/updatePost", updatePost);
 	v1Router.post("/login", basicAuth, createJWT);
-	// v1Router.post("/createUser", createUserDB);
 
 	apiRouter.use("/v1", v1Router);
 };
