@@ -40,6 +40,14 @@ const PostSchema = new Schema({
           //     type: Schema.Types.ObjectId,
           //     ref: 'users'
           // },
+          commentId: {
+            type:String,
+            required: true
+          },
+          author: {
+            type:String,
+            required: true
+          },
           text: {
               type: String,
               required: true

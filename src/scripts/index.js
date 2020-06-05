@@ -83,20 +83,14 @@ function addPostToPage(post) {
 			</div>
 			
       <div class='comment-area'>
-      <div id='commentFeed${post.uid}'> 
-      </ div>
-				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke(${post.uid})"/>
-			</div>
+        <div id='commentFeed${post.uid}'> 
+        </div>
+        </div>
+        <input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
 		</div>
 		`;
     appendHtml("newsFeed", postHtml);
 
-    post.comments
-
-    // post.comments.forEach(function (i) {
-    //   createCommentCard(i, `commentFeed${post.uid}`)
-    //   console.log(i)
-    // })
 
     hide(`list${post.uid}`);
     hide(`editArea${post.uid}`);
@@ -161,8 +155,8 @@ function createCommentFromForm(
   ) {
     if (inputHasSomeText(`commentInput${postId}`)) {
       return {
-        commentId : `comment${id}`,
-        avatar : `https://robohash.org/${postId}?set=set2&size=180x180`,
+        commentId : `${id}`,
+        avatar : `https://robohash.org/${id}?set=set2&size=180x180`,
         date : inputDate,
         author : authorName,
         text: getInputValue(`commentInput${postId}`),
@@ -172,38 +166,51 @@ function createCommentFromForm(
       console.log("post does not have text");
     }
   }
+let testComment = {
+  commentId : `12345`,
+  avatar : `https://robohash.org/12345?set=set2&size=180x180`,
+  date : '1991',
+  author : 'Anonymouse',
+  text: 'This is a test Comment',
+  parentId: `commentFeed12345`  
+}
 
-function createCommentCard(newComment, parentDiv) {
-  // const postUpdate = getPostFromForm(`textArea${postId}`)
-  
-  appendHtml(parentDiv, `<div id='${newComment.commentId}' class='comment-card'> </ div>`)
-  appendHtml(`${newComment.commentId}`, `<img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>`)
-  appendHtml(`${newComment.commentId}`, `<div class='comment-date'> ${newComment.date} </div>`)
-  appendHtml(`${newComment.commentId}`, `<div id='' class='comment-author'> ${newComment.author}</div>`)
-  appendHtml(`${newComment.commentId}`, `<div id='' class='comment-text'> ${newComment.text}</div>`)
+function createCommentCard(newComment) {
+
+  let commentCard = `
+  <div id='${newComment.commentId}' class='comment-card'>
+      <img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>
+      <div id='author${newComment.commentId}' class='comment-author'> ${newComment.author}</div>
+      </br>
+      <div id='date${newComment.commentId}' class='comment-date'> ${newComment.date} </div>
+    <div id='text${newComment.commentId}' class='comment-text'> ${newComment.text}</div>
+  </div>
+  `
+  appendHtml(`commentFeed${newComment.parentId}`, commentCard)
+
 }
 
 function createCommentArray(id) {
   let commentArray = []
-  $(`#${id}`).children().each(function (i) {
-    let arrayUnit = []
-    if (i == 0) {
-      return
-    } else {
-      $(this).children().each(function (i) {
-        arrayUnit.push($(this).text())
-      })
-    }
-    let avatarId = $(`#img${$(this).attr('id')}`)
+  $(`#commentFeed${id}`).children().each(function (i) {
+    console.log($(this).attr('id'))
+
+    
+    let collectedId = String($(this).attr('id'))
+    console.log(collectedId)
     let arrayObj = {
-      commentId : `${$(this).attr('id')}`,
-      avatar : avatarId.attr('src'),
-      date : arrayUnit[1],
-      author : arrayUnit[2],
-      text: arrayUnit[3],
-      parentId: `${id}`      
+      commentId : `${collectedId}`,
+      avatar : `https://robohash.org/${collectedId}?set=set2&size=180x180`,
+      date : $("#" + `date${collectedId}`).text(),
+      author : $("#" + `author${collectedId}`).text(),
+      text : $("#" + `text${collectedId}`).text(),
+      parentId : `${id}`      
     }
+    console.log(arrayObj)
     commentArray.push(arrayObj)
+    
+    
+
   })
   return commentArray
 }
@@ -213,13 +220,11 @@ function commentKeystroke(postUID) {
   let date = $("#" + `date${postUID}`).text();
 
   let commentToAdd = createCommentFromForm(postUID)
-  createCommentCard(commentToAdd, `commentFeed${postUID}`)
-  // updateOnePostWithComment(commentToAdd)
-  let postDate = getInputValue(`date${postUID}`)
-  let commentsArray = createCommentArray(`commentFeed${postUID}`)
-  console.log(commentsArray)
+  createCommentCard(commentToAdd)
+  let commentsArray = createCommentArray(`${postUID}`)
 
   let newPost = getPostFromForm(`textArea${postUID}`, date, postUID, commentsArray)
+  console.log(newPost.comments)
   updateOnePost(newPost)
 }
 
@@ -261,7 +266,6 @@ function saveChangesButtonPressed(id) {
   let date = $("#" + `date${id}`).text();
 
   console.log(newText);
-  // console.log(date)
 
   let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
   console.log(newPost);
@@ -278,6 +282,10 @@ function updatePagePosts(posts) {
   cleanOutElement("newsFeed");
   posts.forEach(function (post) {
     addPostToPage(post);
+    // console.log(post.comments)
+    post.comments.forEach(function (comment) {
+      createCommentCard(comment)
+    })
   });
 }
 
@@ -377,22 +385,22 @@ function deleteFromServer(post) {
   });
 }
 
-// function updateOnePostWithComment(post) {
-//   $.ajax({
-//     url: "/api/v1/addComment",
-//     type: "POST",
-//     data: JSON.stringify(post),
-//     contentType: "application/json; charset=utf-8",
-//     success: function () {
-//       console.log(`message ${post.uid} has been updated`);
+function updateOnePostWithComment(post) {
+  $.ajax({
+    url: "/api/v1/addComment",
+    type: "POST",
+    data: JSON.stringify(post),
+    contentType: "application/json; charset=utf-8",
+    success: function () {
+      console.log(`message ${post.uid} has been updated`);
 
-//       updatePostsFromServer();
-//     },
-//     fail: function (error) {
-//       console.log(error);
-//     },
-//   });
-// }
+      updatePostsFromServer();
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+}
 
 $(document).ready(function () {
   updatePostsFromServer();
