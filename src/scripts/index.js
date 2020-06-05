@@ -48,6 +48,7 @@ examplePost = {
 
 function addPostToPage(post) {
   if (post.postText !== undefined) {
+    
     let postHtml = `
 			<div class="post-card card" id="${post.uid}">
 				<div class='post-card-header'>
@@ -61,7 +62,7 @@ function addPostToPage(post) {
 				<div  class="dropdown-container">
 					<button class="ellipsis-button" onclick="ellipsisButtonPressed('list${post.uid}')">&#8285;</button>
 					<div id="list${post.uid}" class="dropdown-content"> 
-						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}', '${post.postText}')"> Edit </div>
+						<div class="drop-down-item" onclick="editButtonPressed('${post.uid}')"> Edit </div>
 							<div class="drop-down-item" onclick="deleteButtonPressed(${post.uid})"> Delete </div>
 						</div>
 					</div>
@@ -84,11 +85,19 @@ function addPostToPage(post) {
       <div class='comment-area'>
       <div id='commentFeed${post.uid}'> 
       </ div>
-				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
+				<input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke(${post.uid})"/>
 			</div>
 		</div>
 		`;
     appendHtml("newsFeed", postHtml);
+
+    post.comments
+
+    // post.comments.forEach(function (i) {
+    //   createCommentCard(i, `commentFeed${post.uid}`)
+    //   console.log(i)
+    // })
+
     hide(`list${post.uid}`);
     hide(`editArea${post.uid}`);
     hide(`saveChangesButton${post.uid}`);
@@ -103,7 +112,7 @@ function ellipsisButtonPressed(id) {
   }
 }
 
-function editButtonPressed(id, text) {
+function editButtonPressed(id) {
   let date = getInputValue(`date${id}`);
   console.log(date);
   console.log($("#" + id));
@@ -121,15 +130,21 @@ function getPostFromForm(
   commentsArray = []
 ) {
   let authorName = "Anonymous";
+  let inputText 
   if (inputHasSomeText(inputTextId)) {
     console.log("post has text");
     authorName = "Anonymous";
-  } else {
+    inputText = getInputValue(inputTextId)
+  } else if($(`#${inputTextId}`).text() != "" && $(`#${inputTextId}`).text() != null  ) {
+    inputText = $(`#${inputTextId}`).text()
+    console.log("post has text");
+
+  } else{
     // authorName = getInputValue(`${inputTextid}`);
     console.log("post does not have text");
   }
   return {
-    postText: getInputValue(inputTextId),
+    postText: inputText,
     author: authorName,
     postDate: inputDate,
     uid: id,
@@ -141,12 +156,10 @@ function getPostFromForm(
 function createCommentFromForm(
   postId,
   authorName = "Anonymous",
-  inputDate = String(todaysDateString()),
+  inputDate = todaysDateString(),
   id = String(new Date().getTime()),
   ) {
     if (inputHasSomeText(`commentInput${postId}`)) {
-
-      
       return {
         commentId : `comment${id}`,
         avatar : `https://robohash.org/${postId}?set=set2&size=180x180`,
@@ -160,10 +173,10 @@ function createCommentFromForm(
     }
   }
 
-function createCommentCard(newComment) {
+function createCommentCard(newComment, parentDiv) {
   // const postUpdate = getPostFromForm(`textArea${postId}`)
   
-  appendHtml(`commentFeed${newComment.parentId}`, `<div id='${newComment.commentId}' class='comment-card'> </ div>`)
+  appendHtml(parentDiv, `<div id='${newComment.commentId}' class='comment-card'> </ div>`)
   appendHtml(`${newComment.commentId}`, `<img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>`)
   appendHtml(`${newComment.commentId}`, `<div class='comment-date'> ${newComment.date} </div>`)
   appendHtml(`${newComment.commentId}`, `<div id='' class='comment-author'> ${newComment.author}</div>`)
@@ -171,22 +184,17 @@ function createCommentCard(newComment) {
 }
 
 function createCommentArray(id) {
-  console.log('hello from createCommentArray')
   let commentArray = []
   $(`#${id}`).children().each(function (i) {
     let arrayUnit = []
     if (i == 0) {
       return
-    }else {
-
-      console.log(i)
+    } else {
       $(this).children().each(function (i) {
         arrayUnit.push($(this).text())
       })
     }
-
     let avatarId = $(`#img${$(this).attr('id')}`)
-    
     let arrayObj = {
       commentId : `${$(this).attr('id')}`,
       avatar : avatarId.attr('src'),
@@ -197,22 +205,22 @@ function createCommentArray(id) {
     }
     commentArray.push(arrayObj)
   })
-  console.log(commentArray)
-
   return commentArray
 }
 
 function commentKeystroke(postUID) {
-  let newText = getInputValue(`textArea${postUID}`);
+  let newText = $(`#textArea${postUID}`).text();
   let date = $("#" + `date${postUID}`).text();
 
   let commentToAdd = createCommentFromForm(postUID)
-  createCommentCard(commentToAdd)
+  createCommentCard(commentToAdd, `commentFeed${postUID}`)
   // updateOnePostWithComment(commentToAdd)
   let postDate = getInputValue(`date${postUID}`)
-  let commentsArray =  createCommentArray(`commentFeed${postUID}`)
+  let commentsArray = createCommentArray(`commentFeed${postUID}`)
+  console.log(commentsArray)
 
-  getPostFromForm(`textArea${postUID}`, postDate, postUID, commentsArray)
+  let newPost = getPostFromForm(`textArea${postUID}`, date, postUID, commentsArray)
+  updateOnePost(newPost)
 }
 
 function postButtonPressed(id) {
@@ -224,7 +232,6 @@ function postButtonPressed(id) {
     return "Please Add a Message";
   }
 }
-
 
 function commentButtonPressed(cardId) {
   let id = String(cardId);
@@ -370,22 +377,22 @@ function deleteFromServer(post) {
   });
 }
 
-function updateOnePostWithComment(post) {
-  $.ajax({
-    url: "/api/v1/addComment",
-    type: "POST",
-    data: JSON.stringify(post),
-    contentType: "application/json; charset=utf-8",
-    success: function () {
-      console.log(`message ${post.uid} has been updated`);
+// function updateOnePostWithComment(post) {
+//   $.ajax({
+//     url: "/api/v1/addComment",
+//     type: "POST",
+//     data: JSON.stringify(post),
+//     contentType: "application/json; charset=utf-8",
+//     success: function () {
+//       console.log(`message ${post.uid} has been updated`);
 
-      updatePostsFromServer();
-    },
-    fail: function (error) {
-      console.log(error);
-    },
-  });
-}
+//       updatePostsFromServer();
+//     },
+//     fail: function (error) {
+//       console.log(error);
+//     },
+//   });
+// }
 
 $(document).ready(function () {
   updatePostsFromServer();
@@ -393,6 +400,7 @@ $(document).ready(function () {
 
 
 function updateOnePost(post) {
+  console.log(post);
   $.ajax({
     url: "/api/v1/updatePost",
     type: "POST",

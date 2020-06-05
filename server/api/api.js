@@ -39,7 +39,7 @@ const setupV1Routes = (apiRouter) => {
     } catch (err) {
       console.error(err.message);
 
-      res.status(500).send("Server Error");
+      response.status(500).send("Server Error");
     }
   }
 
@@ -52,43 +52,45 @@ const setupV1Routes = (apiRouter) => {
     } catch (err) {
       console.error(err.message);
 
-      res.status(500).send("Server Error");
+      response.status(500).send("Server Error");
     }
   }
 
   async function updatePost(request, response) {
     try {
       const post = await Post.find({ uid: request.body.uid }).update({
-        uid: request.body.uid,
         postText: request.body.postText,
         author: request.body.author,
         postDate: request.body.postDate,
-        
+        uid: request.body.uid,
+        comments: request.body.comments        
       });
       response.sendStatus(200);
 
     } catch (err) {
       console.error(err.message);
-
-      res.status(500).send("Server Error");
+      response.status(500).send("Server Error");
     }
   }
 
-  async function addCommentToPost(request, response) {
-    try {
-      const post = await Post.find({ uid: request.body.postId }).update({
-        uid: request.body.uid,
-        postText: request.body.postText,
-        author: request.body.author,
-        postDate: request.body.postDate,
-        comment: request.body.comments
+  // async function addCommentToPost(request, response) {
+  //   try {
+  //     const post = await Post.find({ uid: request.body.postId }).update({
+  //       uid: request.body.uid,
+  //       postText: request.body.postText,
+  //       author: request.body.author,
+  //       postDate: request.body.postDate,
+  //       comments: request.body.comments
 
-      })
+  //     });
+  //     response.sendStatus(200);
 
-    } catch {
+  //   } catch (err) {
+  //     console.error(err.message);
 
-    }
-  }
+  //     res.status(500).send("Server Error");
+  //   }
+  // }
 
 
 
@@ -102,7 +104,7 @@ const setupV1Routes = (apiRouter) => {
   v1Router.post("/clear", clearAllPosts);
   v1Router.post("/delete", deletePost);
   v1Router.post("/updatePost", updatePost);
-  v1Router.post("/addComment", addCommentToPost)
+  // v1Router.post("/addComment", addCommentToPost);
   v1Router.post("/login", basicAuth, createJWT);
   // v1Router.post("/createUser", createUserDB);
 
