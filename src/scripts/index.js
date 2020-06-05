@@ -1,55 +1,55 @@
+
 function cleanOutElement(id) {
-  $("#" + id).html("");
+	$("#" + id).html("");
 }
 
 function appendHtml(id, htmlToAdd) {
-  $("#" + id).append(htmlToAdd);
+	$("#" + id).append(htmlToAdd);
 }
 
 function setInputValue(id, newValue) {
-  return $("#" + id).val(newValue);
+	return $("#" + id).val(newValue);
 }
 
 function getInputValue(id) {
-  return $("#" + id).val();
+	return $("#" + id).val();
 }
 
 function hide(id) {
-  $("#" + id).hide();
+	$("#" + id).hide();
 }
 
 function show(id) {
-  $("#" + id).show();
+	$("#" + id).show();
 }
 
 function disable(id) {
-  $("#" + id).prop("disabled", true);
+	$("#" + id).prop("disabled", true);
 }
 
 function enable(id) {
-  $("#" + id).prop("disabled", false);
+	$("#" + id).prop("disabled", false);
 }
 
 function inputHasSomeText(id) {
-  return getInputValue(id) !== "";
+	return getInputValue(id) !== "";
 }
 
 function todaysDateString() {
-  return new Date().toISOString().substring(0, 10);
+	return new Date().toISOString().substring(0, 10);
 }
 
 // getting and setting posts on the page
 examplePost = {
-  postText: "Hi, this is a test post 0",
-  image: "",
-  author: "Tony Enerson",
-  postDate: "2020-05-19",
+	postText: "Hi, this is a test post 0",
+	image: "",
+	author: "Tony Enerson",
+	postDate: "2020-05-19"
 };
 
 function addPostToPage(post) {
-  if (post.postText !== undefined) {
-    
-    let postHtml = `
+	if (post.postText !== undefined) {
+		let postHtml = `
 			<div class="post-card card" id="${post.uid}">
 				<div class='post-card-header'>
 					<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
@@ -89,35 +89,44 @@ function addPostToPage(post) {
         <input class="comment-input" id='commentInput${post.uid}' placeholder="Write your comment..." onChange="commentKeystroke('${post.uid}')"/>
 		</div>
 		`;
-    appendHtml("newsFeed", postHtml);
 
+		appendHtml("newsFeed", postHtml);
+		hide(`list${post.uid}`);
+		hide(`editArea${post.uid}`);
+		hide(`saveChangesButton${post.uid}`);
+	}
 
-    hide(`list${post.uid}`);
-    hide(`editArea${post.uid}`);
-    hide(`saveChangesButton${post.uid}`);
-  }
 }
 
 function ellipsisButtonPressed(id) {
-  if ($("#" + id).attr("style") == "display: none;") {
-    show(id);
-  } else {
-    hide(id);
-  }
+	$("#" + id).toggle();
+	// if ($("#" + id).attr("style") == "display: none;") {
+	// 	show(id);
+	// } else {
+	// 	hide(id);
+	// }
 }
+
 
 function editButtonPressed(id) {
   let date = getInputValue(`date${id}`);
   console.log(date);
   console.log($("#" + id));
-
-  $("#" + `textArea${id}`).toggle();
-  $("#" + `editArea${id}`).toggle();
-  $("#" + `saveChangesButton${id}`).toggle();
-  hide(`list${id}`);
+	$("#" + `textArea${id}`).toggle();
+	$("#" + `editArea${id}`).toggle();
+	$("#" + `saveChangesButton${id}`).toggle();
+	hide(`list${id}`);
 }
 
+
+function switchVisibleElements(idToHide, idToShow) {
+	$(`#${idToHide}`).toggle();
+	$(`#${idToShow}`).toggle();
+}
+
+
 function getPostFromForm(
+
   inputTextId,
   inputDate = String(todaysDateString()),
   id = String(new Date().getTime()),
@@ -236,47 +245,55 @@ function postButtonPressed(id) {
   } else {
     return "Please Add a Message";
   }
+
 }
 
 function commentButtonPressed(cardId) {
-  let id = String(cardId);
-  $("#commentInput" + id).focus();
+	let id = String(cardId);
+	$("#commentInput" + id).focus();
 }
 
 function clearNewsFeedButtonPressed() {
-  clearPostsFromServer();
+	clearPostsFromServer();
 }
 
 function deleteButtonPressed(id) {
-  let data = { uid: String(id) };
+	let data = { uid: String(id) };
 
-  deleteFromServer(data);
+	deleteFromServer(data);
 }
 
 function createUserButtonPressed() {
-  let uname = getInputValue(`createUserInput`);
-  let pword = getInputValue(`createPassInput`);
-  let email = getInputValue(`createEmailInput`);
-
-  createUser({ username: uname, password: pword, email: email });
+	let uname = getInputValue(`createUserInput`);
+	let pword = getInputValue(`createPassInput`);
+	let email = getInputValue(`createEmailInput`);
+	createUser(
+		{ username: uname, password: pword, email: email },
+		"user-area",
+		"status-input"
+	);
 }
 
 function saveChangesButtonPressed(id) {
-  let newText = getInputValue(`textArea${id}`);
-  let date = $("#" + `date${id}`).text();
+	let newText = getInputValue(`textArea${id}`);
+	let date = $("#" + `date${id}`).text();
+
 
   console.log(newText);
 
-  let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
-  console.log(newPost);
-  console.log(date);
 
-  updateOnePost(newPost);
+	let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
+	console.log(newPost);
+	console.log(date);
+
+	updateOnePost(newPost);
 }
 
-// function loginButtonPressed(id) {
-
-// }
+function loginButtonPressed() {
+	let pword = getInputValue(`loginPassInput`);
+	let email = getInputValue(`loginEmailInput`);
+	userLogin({ password: pword, email: email }, "user-area", "status-input");
+}
 
 function updatePagePosts(posts) {
   cleanOutElement("newsFeed");
@@ -287,102 +304,115 @@ function updatePagePosts(posts) {
       createCommentCard(comment)
     })
   });
+
+}
+
+function loadUserMedia(idToHide, idToShow) {
+	switchVisibleElements(idToHide, idToShow);
+	updatePostsFromServer();
 }
 
 //---- server interaction
+let token = "";
 
-function createUser(userObject) {
-  console.log("hey");
-  $.ajax({
-    url: "/users",
-    type: "POST",
-    data: JSON.stringify(userObject),
-    contentType: "application/json; charset=utf-8",
-    success: function (message) {
-      console.log("message from idex");
-      console.log(message);
-    },
-    fail: function (errors) {
-      console.log("error");
-      // what do we do here?
-    },
-  });
+function createUser(userObject, idToHide, idToShow) {
+	console.log("hey");
+	$.ajax({
+		url: "/users",
+		type: "POST",
+		data: JSON.stringify(userObject),
+		contentType: "application/json; charset=utf-8",
+		success: function(data) {
+			console.log("User created");
+			token = data.token;
+			loadUserMedia(idToHide, idToShow);
+		},
+		fail: function() {}
+	});
 }
 
-//WORK IN PROGRESS
-function userLogin(username, password) {
-  $.ajax({
-    url: "/api/v1/login",
-    type: "POST",
-    headers: {
-      Authorization: `Basic ${btoa("username:password")}`,
-    },
-    success: function () {
-      console.log("Logged in");
-    },
-  });
+function userLogin(userLoginObject, idToHide, idToShow) {
+	console.log(userLoginObject);
+	$.ajax({
+		url: "/api/v1/login",
+		type: "POST",
+		data: JSON.stringify(userLoginObject),
+		contentType: "application/json; charset=utf-8",
+		success: function(data) {
+			console.log("User logged in");
+			token = data.token;
+			console.log(token);
+			loadUserMedia(idToHide, idToShow);
+		}
+	});
 }
 
 function postPostsToServerAndUpdatePage(post) {
-  $.ajax({
-    url: "/api/v1/addPost",
-    type: "POST",
-    data: JSON.stringify(post),
-    contentType: "application/json; charset=utf-8",
-    // beforeSend: function(xhr) {
-    // 	//Include the bearer token in header
-    // 	xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-    // },
-    success: function () {
-      console.log("In post callback");
-      updatePostsFromServer();
-    },
-    fail: function (error) {
-      // what do we do here?
-    },
-  });
+	$.ajax({
+		url: "/api/v1/addPost",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+		success: function() {
+			console.log("In post callback");
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			// what do we do here?
+		}
+	});
 }
 
 function updatePostsFromServer() {
-  console.log("posts updated");
-  $.getJSON("/api/v1/posts")
-    .done(function (posts) {
-      updatePagePosts(posts);
-    })
-    .fail(function (error) {
-      // what do we do here????
-    });
+	console.log("posts updated");
+	$.getJSON("/api/v1/posts")
+		.done(function(posts) {
+			updatePagePosts(posts);
+		})
+		.fail(function(error) {
+			// what do we do here????
+		});
 }
 
 function clearPostsFromServer() {
-  $.ajax({
-    url: "/api/v1/clear",
-    type: "POST",
-    success: function () {
-      console.log("server has been cleared");
-      updatePostsFromServer();
-    },
-    fail: function (error) {
-      // what do we do here?
-    },
-  });
+	$.ajax({
+		url: "/api/v1/clear",
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+		success: function() {
+			console.log("server has been cleared");
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			// what do we do here?
+		}
+	});
 }
 
 function deleteFromServer(post) {
-  $.ajax({
-    url: "/api/v1/delete",
-    type: "POST",
-    data: JSON.stringify(post),
-    contentType: "application/json; charset=utf-8",
-    success: function () {
-      console.log("message has been deleted");
+	$.ajax({
+		url: "/api/v1/delete",
+		type: "POST",
+		data: JSON.stringify(post),
+		contentType: "application/json; charset=utf-8",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+		success: function() {
+			console.log("message has been deleted");
 
-      updatePostsFromServer();
-    },
-    fail: function (error) {
-      console.log(error);
-    },
-  });
+			updatePostsFromServer();
+		},
+		fail: function(error) {
+			console.log(error);
+		}
+	});
 }
 
 function updateOnePostWithComment(post) {
@@ -425,11 +455,3 @@ function updateOnePost(post) {
   });
 }
 
-$(document).ready(function () {
-  updatePostsFromServer();
-});
-
-// module.exports = {
-// 	add: add,
-// 	subtract: subtract
-// };
