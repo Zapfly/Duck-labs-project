@@ -212,7 +212,6 @@ header {
 	justify-content: flex-end;
 }
 
-
 /* COMMENT AREA */
 .comment-area {
 	grid-column-start: 1;
@@ -233,6 +232,11 @@ header {
 	width: 40%;
 	margin-right: 2%;
 	justify-content: center;
+	display: grid;
+}
+
+.like-button {
+	height: 20px;
 }
 
 .file-upload-img {
@@ -245,6 +249,7 @@ header {
 
 .ellipsis-button {
 	width: fit-content;
+	/* text-align: center; */
 	top: 50%;
 	justify-self: right;
 	background-color: transparent;
@@ -257,6 +262,12 @@ header {
 	margin-right: 2%;
 }
 
+/* .overlap {
+    position: relative;
+    display: inline-block
+} */
+
+/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
 	display: none;
 	position: absolute;
@@ -268,7 +279,6 @@ header {
 	border-radius: 8px;
 	padding: 5px;
 }
-
 .comment-card-container {
 	width: 96%;
 }

@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("config");
-// const routerUser = express.Router();
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 const NodeCache = require("node-cache");
@@ -37,12 +36,6 @@ router.post(
 					.status(400)
 					.json({ errors: [{ msg: "User already exists" }] });
 			}
-			//Get users gravatar
-			//   const avatar = gravatar.url(email, {
-			//     s: "200",
-			//     r: "pg",
-			//     d: "mm",
-			//   });
 
 			user = new User({
 				username,
@@ -65,18 +58,6 @@ router.post(
 				}
 			};
 
-			// const token = jwt.sign(payload, config.get("jwtSecret"), {
-			// 	expiresIn: 10800 // expeires in 3 hours
-			// });
-			// accessToken.set(user.id, token, 10800);
-			// console.log("*******", token);
-
-			// return res.json({
-			// 	message: "user created after sign up",
-			// 	token: token
-			// });
-
-			// });
 			jwt.sign(
 				payload,
 				config.get("jwtSecret"),
