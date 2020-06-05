@@ -21,7 +21,7 @@ const setupV1Routes = apiRouter => {
 			const posts = await Post.find().sort({ date: -1 });
 			response.json(posts);
 		} catch (err) {
-			console.error(err.message);
+	
 			response.status(500).send("Server Error");
 		}
 		//   let allPosts = database.findAllPosts();
@@ -31,7 +31,7 @@ const setupV1Routes = apiRouter => {
 
 	async function addNewPost(request, response) {
 		let post = new Post(request.body);
-		console.log("saving post", request.body);
+		console.log("saving post");
 		await post.save();
 		response.sendStatus(200);
 	}
@@ -41,7 +41,6 @@ const setupV1Routes = apiRouter => {
 		try {
 			const posts = await Post.find().remove({});
 			response.status(200).json(posts);
-			console.log(posts);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send("Server Error");
@@ -71,7 +70,6 @@ const setupV1Routes = apiRouter => {
         uid: request.body.uid,
         comments: request.body.comments        
       });
-      console.log("*******", request.body)
       response.sendStatus(200);
 
     } catch (err) {

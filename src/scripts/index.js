@@ -107,8 +107,6 @@ function ellipsisButtonPressed(id) {
 
 function editButtonPressed(id) {
 	let date = getInputValue(`date${id}`);
-	console.log(date);
-	console.log($("#" + id));
 	$("#" + `textArea${id}`).toggle();
 	$("#" + `editArea${id}`).toggle();
 	$("#" + `saveChangesButton${id}`).toggle();
@@ -197,10 +195,8 @@ function createCommentArray(id) {
 	$(`#commentFeed${id}`)
 		.children()
 		.each(function(i) {
-			console.log($(this).attr("id"));
 
 			let collectedId = String($(this).attr("id"));
-			console.log(collectedId);
 			let arrayObj = {
 				commentId: `${collectedId}`,
 				avatar: `https://robohash.org/${collectedId}?set=set2&size=180x180`,
@@ -209,7 +205,6 @@ function createCommentArray(id) {
 				text: $("#" + `text${collectedId}`).text(),
 				parentId: `${id}`
 			};
-			console.log(arrayObj);
 			commentArray.push(arrayObj);
 		});
 	return commentArray;
@@ -229,7 +224,6 @@ function commentKeystroke(postUID) {
 		postUID,
 		commentsArray
 	);
-	console.log(newPost.comments);
 	updateOnePost(newPost);
 }
 
@@ -273,11 +267,8 @@ function saveChangesButtonPressed(id) {
 	let newText = getInputValue(`textArea${id}`);
 	let date = $("#" + `date${id}`).text();
 
-	console.log(newText);
 
 	let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
-	console.log(newPost);
-	console.log(date);
 
 	updateOnePost(newPost);
 }
@@ -292,7 +283,6 @@ function updatePagePosts(posts) {
 	cleanOutElement("newsFeed");
 	posts.forEach(function(post) {
 		addPostToPage(post);
-		// console.log(post.comments)
 		post.comments.forEach(function(comment) {
 			createCommentCard(comment);
 		});
@@ -307,7 +297,6 @@ function loadUserMedia(idToHide, idToShow) {
 let token = "";
 
 function createUser(userObject, idToHide, idToShow) {
-	console.log("hey");
 	$.ajax({
 		url: "/users",
 		type: "POST",
@@ -316,7 +305,6 @@ function createUser(userObject, idToHide, idToShow) {
 		success: function(data) {
 			console.log("User created");
 			token = data.token;
-			console.log(data.token);
 			loadUserMedia(idToHide, idToShow);
 		},
 		fail: function() {}
