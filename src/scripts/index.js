@@ -312,7 +312,6 @@ function createUser(userObject, idToHide, idToShow) {
 }
 
 function userLogin(userLoginObject, idToHide, idToShow) {
-	console.log(userLoginObject);
 	$.ajax({
 		url: "/api/v1/login",
 		type: "POST",
@@ -321,7 +320,6 @@ function userLogin(userLoginObject, idToHide, idToShow) {
 		success: function(data) {
 			console.log("User logged in");
 			token = data.token;
-			console.log(token);
 			loadUserMedia(idToHide, idToShow);
 			updatePostsFromServer();
 		}
@@ -342,7 +340,7 @@ function postPostsToServerAndUpdatePage(post) {
 			updatePostsFromServer();
 		},
 		fail: function(error) {
-			// what do we do here?
+      console.log(error.message)
 		}
 	});
 }
@@ -354,7 +352,7 @@ function updatePostsFromServer() {
 			updatePagePosts(posts);
 		})
 		.fail(function(error) {
-			// what do we do here????
+      console.log(error.message)
 		});
 }
 
@@ -371,7 +369,7 @@ function clearPostsFromServer() {
 			updatePostsFromServer();
 		},
 		fail: function(error) {
-			// what do we do here?
+      console.log(error.message)
 		}
 	});
 }
