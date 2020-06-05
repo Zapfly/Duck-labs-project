@@ -2,7 +2,6 @@ const express = require("express");
 const Post = require("../models/Posts");
 const { check, validationResult } = require("express-validator");
 const Router = express.Router;
-const database = require("../database/database");
 const jwt = require("jsonwebtoken");
 const { basicAuth, jwtAuth, createJWT } = require("./auth");
 const NodeCache = require("node-cache");

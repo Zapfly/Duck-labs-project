@@ -98,11 +98,6 @@ function addPostToPage(post) {
 
 function ellipsisButtonPressed(id) {
 	$("#" + id).toggle();
-	// if ($("#" + id).attr("style") == "display: none;") {
-	// 	show(id);
-	// } else {
-	// 	hide(id);
-	// }
 }
 
 function editButtonPressed(id) {
@@ -137,7 +132,6 @@ function getPostFromForm(
 		inputText = $(`#${inputTextId}`).text();
 		console.log("post has text");
 	} else {
-		// authorName = getInputValue(`${inputTextid}`);
 		console.log("post does not have text");
 	}
 	return {

@@ -1,14 +1,8 @@
 const express = require("express");
-//const mongo = require("../inMongo");
-//const Post = require("../models/Posts");
 const config = require("config");
-//const { check, validationResult } = require("express-validator");
-//const Router = express.Router;
-//const database = require("../database/database");
 const NodeCache = require("node-cache");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/User");
 
 
@@ -37,21 +31,20 @@ async function basicAuth(request, response, next) {
 				]
 			});
 		} else {
-			console.log("user checked from basic auth");
 			next();
 		}
 	}
 }
 
 function jwtAuth(request, response, next) {
-	console.log("from jwt function");
+
 
 	// check for jwt auth header
 	const noAuth = !request.headers.authorization;
-	console.log(request.headers.authorization);
+
 
 	if (noAuth || request.headers.authorization.indexOf("Bearer ") === -1) {
-		console.log("@@@@ line 54");
+	
 		return response
 			.status(401)
 			.json({ message: "Missing Authorization Header" });
@@ -63,7 +56,8 @@ function jwtAuth(request, response, next) {
 	// verify the jwt
 	const payload = jwt.verify(token, config.get("jwtSecret"));
 
-	console.log(payload.user.id);
+	
+	
 	//check if token was resently check
 
 	// console.log(accessToken)
@@ -81,9 +75,9 @@ function jwtAuth(request, response, next) {
 	// }
 
 	const user = User.findById(payload.user.id);
-	console.log("*****73 do que ever see this?");
+	
 	if (user) {
-		console.log("you are the user");
+		
 		request.user = user;
 		return next();
 	} else {
@@ -94,7 +88,7 @@ function jwtAuth(request, response, next) {
 }
 
 async function createJWT(request, response) {
-	console.log("from create jwt");
+	
 	const { email, password } = request.body;
 	const user = await User.findOne({ email });
 
