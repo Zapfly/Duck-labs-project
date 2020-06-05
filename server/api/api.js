@@ -7,6 +7,11 @@ const Router = express.Router;
 const database = require("../database/database");
 const jwt = require("jsonwebtoken");
 const { basicAuth, jwtAuth, createJWT } = require("./auth");
+const NodeCache = require("node-cache");
+
+
+
+const accessToken = new NodeCache();
 
 const setupV1Routes = apiRouter => {
 	// Controller Functions
@@ -72,25 +77,6 @@ const setupV1Routes = apiRouter => {
     } catch (err) {
       console.error(err.message);
       response.status(500).send("Server Error");
-    }
-  }
-
-  async function addCommentToPost(request, response) {
-    try {
-      const post = await Post.find({ uid: request.body.postId }).update({
-        // uid: request.body.uid,
-        // postText: request.body.postText,
-        // author: request.body.author,
-        // postDate: request.body.postDate,
-        comments: request.body.comments
-
-      });
-      response.sendStatus(200);
-
-    } catch (err) {
-      console.error(err.message);
-
-      res.status(500).send("Server Error");
     }
   }
 

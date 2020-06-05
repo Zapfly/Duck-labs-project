@@ -11,7 +11,7 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
-const accessToken = new NodeCache();
+
 
 //Basic auth is cheching user email and password
 async function basicAuth(request, response, next) {
@@ -48,8 +48,10 @@ function jwtAuth(request, response, next) {
 
 	// check for jwt auth header
 	const noAuth = !request.headers.authorization;
+	console.log(request.headers.authorization);
 
 	if (noAuth || request.headers.authorization.indexOf("Bearer ") === -1) {
+		console.log("@@@@ line 54");
 		return response
 			.status(401)
 			.json({ message: "Missing Authorization Header" });
@@ -63,27 +65,32 @@ function jwtAuth(request, response, next) {
 
 	console.log(payload.user.id);
 	//check if token was resently check
-	if (accessToken.get(payload.user.id)) {
-		if (accessToken.get(payload.user.id) == token) {
-			return next();
-		}
-	} else {
-		return response.status(401).json({
-			message: "Your session has expired. Please sign up again."
-		});
-	}
 
-	// const user = User.findById(payload.user.id);
-	// console.log("*****73 do que ever see this?");
-	// if (user) {
-	// 	console.log("you are the user");
-	// 	request.user = user;
-	// 	return next();
+	// console.log(accessToken)
+	// if (accessToken.get(payload.user.id)) {
+		
+	// 	if (accessToken.get(payload.user.id) == token) {
+	// 		console.log("@@@@ line 70");
+	// 		return next();
+	// 	}
 	// } else {
+	// 	console.log("@@@@ line 73");
 	// 	return response.status(401).json({
-	// 		message: "JWT Authentication failed: Invalid username or password."
+	// 		message: "Your session has expired. Please sign up again."
 	// 	});
 	// }
+
+	const user = User.findById(payload.user.id);
+	console.log("*****73 do que ever see this?");
+	if (user) {
+		console.log("you are the user");
+		request.user = user;
+		return next();
+	} else {
+		return response.status(401).json({
+			message: "JWT Authentication failed: Invalid username or password."
+		});
+	}
 }
 
 async function createJWT(request, response) {
@@ -100,7 +107,7 @@ async function createJWT(request, response) {
 	const token = jwt.sign(payload, config.get("jwtSecret"), {
 		expiresIn: 10800 // expeires in 3 hours
 	});
-	accessToken.set(user.id, token, 10800);
+	//accessToken.set(user.id, token, 10800);
 
 	return response.json({
 		message: "login success",
