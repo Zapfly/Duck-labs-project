@@ -18,33 +18,53 @@
         <div id=searchBarContainer>
             <input class='search-bar under-construction' placeholder='search bar under construction'>
         </div>
-        <div id="profile-info" class="under-construction"> 
-            <input id='loginEmailInput' type="text" placeholder="Email" value="example@gmail.com" />
-            <input id='loginPassInput'  type="text" placeholder="Password" value="123456"/>
-            <button id="postButton" onClick="loginButtonPressed()">Log in</button> 
-            
-            <img src="" class="profile-thumbnail under-construction" />
-        </div>
+       
+        
+      
     </header>
 
-    <div class='create-user-area'>
-            <input id='createUserInput'  type="text" placeholder="Username" value="testName"/>
-            <input id='createPassInput'  type="text" placeholder="Password" value="testPassword"/>
-            <input id='createEmailInput' type="text" placeholder="Email" value="testEmail@gmail.com"/>
-            <button onclick="createUserButtonPressed()">Sign Up</button>         
+
+    <div id='user-area'>
+        <h3 >Choose Your Account</h3>
+        <div id="userAreaButtons">
+            <button class=" card" id="loginPageButton" onclick="switchVisibleElements('userAreaButtons', 'loginUser')">Log in</button>
+            <button class="card" id="signUpPageButton" onclick="switchVisibleElements('userAreaButtons','createUser')">Sign Up</button>
+        </div>
+        
+        <div class="login-user card" id="loginUser" > 
+            <input class="user-input card" id='loginEmailInput' type="text" placeholder="Email" value="example@gmail.com" /><br/>
+            <input class="user-input card" id='loginPassInput'  type="text" placeholder="Password" value="123456"/><br/>
+            <input class="user-input card" id="loginButton" type="button" value="Log In" onClick="loginButtonPressed()"/>    
+            <br>
+            
+            <span id="orLabel">or</span>
+            <button class="card" id="signUpPageButton" onclick="switchVisibleElements('userAreaButtons','createUser')">Sign Up</button>
+        
+        </div>
+        <div class="create-user card" id="createUser">
+            <input class="card user-input" id='createUserInput'  type="text" placeholder="Username" value="testName"/><br/>
+            <input class="card user-input" id='createPassInput'  type="text" placeholder="Password" value="testPassword"/><br/>
+            <input class="card user-input" id='createEmailInput' type="text" placeholder="Email" value="testEmail@gmail.com"/><br/>
+            <input class="card user-input" id='signUpButton' type="button" value="Sign Up" onclick="createUserButtonPressed()"/>
+        </div>
+            
+            
+       
     </div>
 
-    <div class="status-input card">
-        <span>Create Post</span>
-        <img class='profile-thumbnail' src="" />
-        <!-- <div class="create-status-text">Create Status</div>          -->
-        <input id='statusInputField'  type="text" placeholder="What's on your mind?" onkeypress="pressEnterKey('statusInputField', postButtonPressed)"/>
-        <div class="button-container"> 
+    <div class=" card" id="status-input">
+        <div class="create-status-text">
+            <span>Create Post</span>
+            <img class='profile-thumbnail' src="" />
+            <input id='statusInputField'  type="text" placeholder="What's on your mind?" onkeypress="pressEnterKey('statusInputField', postButtonPressed)"/>
+            <div class="button-container"> 
                 <button id="postButton" onClick="postButtonPressed()">Post</button> 
                 <button class='button-with-image under-construction' id='fileUploadButton'>&#128248;
                     Photo/Video
                 </button> 
-        </div>
+            </div>
+        </div>         
+        
     </div>
     <div id="newsFeed">
         <!-- posts will go here-->
