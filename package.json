@@ -12,7 +12,7 @@
   "scripts": {
     "test": "test",
     "start": "cd server && npm start",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix src && npm run build --prefix src"
+    "heroku-postbuild": "cd server && npm install"
   },
   "repository": {
     "type": "git",
