@@ -229,7 +229,7 @@ function createCommentArray(id) {
   return commentArray;
 }
 
-async function commentKeystroke(postUID) {
+function commentKeystroke(postUID) {
   let newText = $(`#textArea${postUID}`).text();
   let date = $("#" + `date${postUID}`).text();
 
@@ -238,14 +238,14 @@ async function commentKeystroke(postUID) {
   let commentsArray = createCommentArray(`${postUID}`);
 
   let newPost = getPostFromForm(newText, date, postUID, commentsArray);
-  await updateOnePost(newPost);
+  updateOnePost(newPost);
 }
 
 function postButtonPressed(id) {
   if (inputHasSomeText(id)) {
     let postToAdd = getPostFromForm(id);
     postPostsToServerAndUpdatePage(postToAdd);
-    cleanOutElement(id);
+    setInputValue(id, "");
   } else {
     return "Please Add a Message";
   }
@@ -279,7 +279,8 @@ function createUserButtonPressed() {
 
 function saveChangesButtonPressed(id) {
   let date = $("#" + `date${id}`).text();
-  let newPost = getPostFromForm(`editArea${id}`, date, `${id}`);
+  let commentsArray = createCommentArray(`${id}`);
+  let newPost = getPostFromForm(`editArea${id}`, date, `${id}`, commentsArray);
   updateOnePost(newPost);
 }
 
@@ -289,7 +290,7 @@ function loginButtonPressed() {
   userLogin({ password: pword, email: email }, "user-area", "status-input");
 }
 
-async function updatePagePosts(posts) {
+function updatePagePosts(posts) {
   cleanOutElement("newsFeed");
   posts.forEach(function (post) {
     addPostToPage(post);
@@ -332,12 +333,15 @@ function userLogin(userLoginObject, idToHide, idToShow) {
       loadUserMedia(idToHide, idToShow);
       updatePostsFromServer();
     },
+    fail: function (err) {
+      console.log(err);
+    },
   });
 }
 
-async function postPostsToServerAndUpdatePage(post) {
+function postPostsToServerAndUpdatePage(post) {
   console.log(token);
-  await $.ajax({
+  $.ajax({
     url: "/api/v1/addPost",
     type: "POST",
     data: JSON.stringify(post),
@@ -345,8 +349,8 @@ async function postPostsToServerAndUpdatePage(post) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    success: async function () {
-      await updatePostsFromServer();
+    success: function () {
+      updatePostsFromServer();
     },
     fail: function (error) {
       console.log(error.message);
@@ -354,9 +358,9 @@ async function postPostsToServerAndUpdatePage(post) {
   });
 }
 
-async function updatePostsFromServer() {
-  await $.getJSON("/api/v1/posts")
-    .done(async function (posts) {
+function updatePostsFromServer() {
+  $.getJSON("/api/v1/posts")
+    .done(function (posts) {
       updatePagePosts(posts);
     })
     .fail(function (error) {
@@ -364,16 +368,16 @@ async function updatePostsFromServer() {
     });
 }
 
-async function clearPostsFromServer() {
-  await $.ajax({
+function clearPostsFromServer() {
+  $.ajax({
     url: "/api/v1/clear",
     type: "POST",
     contentType: "application/json; charset=utf-8",
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    success: async function () {
-      await updatePostsFromServer();
+    success: function () {
+      updatePostsFromServer();
     },
     fail: function (error) {
       console.log(error.message);
@@ -381,8 +385,8 @@ async function clearPostsFromServer() {
   });
 }
 
-async function deleteFromServer(post) {
-  await $.ajax({
+function deleteFromServer(post) {
+  $.ajax({
     url: "/api/v1/delete",
     type: "POST",
     data: JSON.stringify(post),
@@ -390,8 +394,8 @@ async function deleteFromServer(post) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    success: async function () {
-      await updatePostsFromServer();
+    success: function () {
+      updatePostsFromServer();
     },
     fail: function (error) {
       console.log(error);
@@ -399,14 +403,14 @@ async function deleteFromServer(post) {
   });
 }
 
-async function updateOnePost(post) {
-  await $.ajax({
+function updateOnePost(post) {
+  $.ajax({
     url: "/api/v1/updatePost",
     type: "POST",
     data: JSON.stringify(post),
     contentType: "application/json; charset=utf-8",
-    success: async function () {
-      await updatePostsFromServer();
+    success: function () {
+      updatePostsFromServer();
     },
     fail: function (error) {
       console.log(error);

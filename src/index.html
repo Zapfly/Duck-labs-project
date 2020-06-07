@@ -26,13 +26,16 @@
             <button class=" card" id="loginPageButton" onclick="switchVisibleElements('userAreaButtons', 'loginUser')">Log in</button>
             <button class="card" id="signUpPageButton" onclick="switchVisibleElements('userAreaButtons','createUser')">Sign Up</button>
         </div>
-        
+      
         <div class="login-user card" id="loginUser" > 
+            <div id="loginErrorMessage"></div>
+
             <input class="user-input card" id='loginEmailInput' type="text" placeholder="Email" value="example@gmail.com" /><br/>
             <input class="user-input card" id='loginPassInput'  type="text" placeholder="Password" value="123456"/><br/>
             <input class="user-input card" id="loginButton" type="button" value="Log In" onClick="loginButtonPressed()"/>    
             <br>
             <div class="or-label"><span>or</span></div>
+            <div id="signupErrorMessage"></div>
             <button class="card" id="signUpPageButton" onclick="switchVisibleElements('loginUser','createUser')">Sign Up</button>
         
         </div>
@@ -43,7 +46,7 @@
             <input class="card user-input" id='signUpButton' type="button" value="Sign Up" onclick="createUserButtonPressed()"/>
             <br>
             <div class="or-label"><span>or</span></div>
-            <button class=" card" id="loginPageButton" onclick="switchVisibleElements('createUser', 'loginUser')">Log in</button>
+            <button class="button-with-image card" id="loginPageButton" onclick="switchVisibleElements('createUser', 'loginUser')">Log in</button>
         
         </div>   
     </div>
@@ -53,7 +56,7 @@
         <div class="create-status-text">
             <span>Create Post</span>
             <img class='profile-thumbnail' src="" />
-            <input id='statusInputField'  type="text" placeholder="What's on your mind?" onchange="postButtonPressed('statusInputField')"/>
+            <input id='statusInputField'  type="text" placeholder="What's on your mind?" onchange="postButtonPressed('statusInputField')" /> 
             <div class="button-container"> 
                 <button id="postButton" onClick="postButtonPressed('statusInputField')">&#9993; Post</button>
             </div>
