@@ -224,7 +224,7 @@ function postButtonPressed(id) {
 	if (inputHasSomeText(id)) {
 		let postToAdd = getPostFromForm(id);
 		postPostsToServerAndUpdatePage(postToAdd);
-		cleanOutElement(id);
+		setInputValue(id, "");
 	} else {
 		return "Please Add a Message";
 	}
