@@ -8,8 +8,9 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">    
     <script type='text/javascript' src="scripts/jquery.js" ></script>
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script type='text/javascript' src="scripts/index.js" ></script>
-    <script type='text/javascript' src="scripts/comments.js"></script>
+    
     
 
 <body>
@@ -54,10 +55,10 @@
             <img class='profile-thumbnail' src="" />
             <input id='statusInputField'  type="text" placeholder="What's on your mind?" onchange="postButtonPressed('statusInputField')"/>
             <div class="button-container"> 
-                <button id="postButton" onClick="postButtonPressed('statusInputField')">Post</button>
+                <button id="postButton" onClick="postButtonPressed('statusInputField')">&#9993; Post</button>
             </div>
         </div>         
-        
+        <button id="logOut" onClick="pressedLogOut()">Log Out</button>
     </div>
     <div id="newsFeed">
         <!-- posts will go here-->
