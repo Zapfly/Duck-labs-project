@@ -147,6 +147,7 @@ function getPostFromForm(
   id = String(new Date().getTime()),
   commentsArray = []
 ) {
+	console.log(inputTextId)
   let authorName = "Anonymous";
   let inputText;
   if (inputHasSomeText(inputTextId)) {
@@ -230,7 +231,7 @@ function createCommentArray(id) {
 }
 
 function commentKeystroke(postUID) {
-  let newText = $(`#textArea${postUID}`).text();
+  let newText = `textArea${postUID}`;
   let date = $("#" + `date${postUID}`).text();
 
   let commentToAdd = createCommentFromForm(postUID);
