@@ -75,6 +75,7 @@ async function createJWT(request, response) {
   return response.json({
     message: "login success",
     token: token,
+    user: user.username,
   });
 }
 
