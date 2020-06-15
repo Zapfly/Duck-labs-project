@@ -16,7 +16,7 @@ async function basicAuth(request, response, next) {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return resquest.status(400).json({
+      return response.status(400).json({
         errors: [
           {
             msg: "Authentication failed: Invalid username or password.",
@@ -67,14 +67,15 @@ async function createJWT(request, response) {
       id: user.id,
     },
   };
+  
   const token = jwt.sign(payload, config.get("jwtSecret"), {
     expiresIn: 10800, // expeires in 3 hours
   });
-  //accessToken.set(user.id, token, 10800);
-
+  
   return response.json({
     message: "login success",
     token: token,
+    user: user.username
   });
 }
 
