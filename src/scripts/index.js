@@ -1,12 +1,3 @@
-var TOKEN_NAME = "token";
-let token = "";
-$(document).ready(function () {
-  if (hasToken()) {
-    loadUserMedia("user-area", "status-input");
-    updatePostsFromServer();
-  }
-});
-
 function cleanOutElement(id) {
   $("#" + id).html("");
 }
@@ -39,9 +30,21 @@ function enable(id) {
   $("#" + id).prop("disabled", false);
 }
 
-function pressedLogOut() {
-  $.removeCookie(TOKEN_NAME);
-  window.location.href = "index.html";
+let TOKEN_NAME = "token";
+let token = "";
+$(document).ready(function () {
+  if (hasToken()) {
+    loadUserMedia("user-area", "status-input");
+    updatePostsFromServer();
+  }
+});
+
+let user_name = "username";
+let user = "";
+
+function setUser(_username) {
+  $.cookie(user_name, _username);
+  user = _username;
 }
 
 function setToken(_token) {
@@ -49,9 +52,9 @@ function setToken(_token) {
   token = _token;
 }
 
-function getToken() {
-  $.cookie(TOKEN_NAME);
-}
+// function getToken() {
+//   $.cookie(TOKEN_NAME);
+// }
 
 function hasToken() {
   if ($.cookie(TOKEN_NAME)) {
@@ -59,6 +62,12 @@ function hasToken() {
     return true;
   }
   return false;
+}
+
+function pressedLogOut() {
+  $.removeCookie(TOKEN_NAME);
+  $.removeCookie(user_name);
+  window.location.href = "index.html";
 }
 
 function inputHasSomeText(id) {
@@ -233,6 +242,8 @@ function createCommentArray(id) {
 function commentKeystroke(postUID) {
   let newText = `textArea${postUID}`;
   let date = $("#" + `date${postUID}`).text();
+  console.log(nexText);
+  console.log(date);
 
   let commentToAdd = createCommentFromForm(postUID);
   createCommentCard(commentToAdd);
@@ -315,6 +326,7 @@ function createUser(userObject, idToHide, idToShow) {
     contentType: "application/json; charset=utf-8",
     success: function (data) {
       setToken(data.token);
+      setUser(data.user);
       window.location.href = "index.html";
     },
     fail: function (data) {
@@ -331,17 +343,18 @@ function userLogin(userLoginObject, idToHide, idToShow) {
     contentType: "application/json; charset=utf-8",
     success: function (data) {
       setToken(data.token);
+      setUser(data.user);
+      console.log(data.user);
       loadUserMedia(idToHide, idToShow);
       updatePostsFromServer();
     },
-    fail: function (err) {
-      console.log(err);
+    error: function (error) {
+      console.log("HttpUpload failed: " + error.responseText);
     },
   });
 }
 
 function postPostsToServerAndUpdatePage(post) {
-  console.log(token);
   $.ajax({
     url: "/api/v1/addPost",
     type: "POST",
