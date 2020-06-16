@@ -17,6 +17,10 @@ const PostSchema = new Schema({
   uid: {
     type: String,
   },
+  avatar: {
+    type: String,
+    required: true,
+  },
   comments: [
       {
           user: {

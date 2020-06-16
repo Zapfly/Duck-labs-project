@@ -102,11 +102,12 @@ examplePost = {
 };
 
 function addPostToPage(post) {
+  console.log(post)
   if (post.postText !== undefined) {
     let postHtml = `
 			<div class="post-card card" id="${post.uid}">
 				<div class='post-card-header'>
-					<img class="profile-thumbnail" src='https://robohash.org/${user}?set=set2&size=180x180'/>
+					<img class="profile-thumbnail" src='${post.avatar}'/>
 					<div class="post-author"> 
 						${post.author.toUpperCase()}
 						</br>
@@ -169,7 +170,7 @@ function getPostFromForm(
   inputTextId,
   inputDate = String(todaysDateString()),
   id = String(new Date().getTime()),
-  commentsArray = []
+  commentsArray = [],
 ) {
   
   let inputText;
@@ -189,6 +190,7 @@ function getPostFromForm(
     postDate: inputDate,
     uid: id,
     comments: commentsArray,
+    avatar: `https://robohash.org/${user}?set=set2&size=180x180`
   };
 }
 
@@ -205,7 +207,8 @@ function createCommentFromForm(
       date: inputDate,
       author: authorName,
       text: getInputValue(`commentInput${postId}`),
-      parentId: `${postId}`,
+      parentId: `${postId}`
+
     };
   } else {
     console.log("post does not have text");
@@ -248,7 +251,7 @@ function createCommentArray(id) {
         date: $("#" + `date${collectedId}`).text(),
         author: $("#" + `author${collectedId}`).text(),
         text: $("#" + `text${collectedId}`).text(),
-        parentId: `${id}`,
+        parentId: `${id}`
       };
       commentArray.push(arrayObj);
     });
@@ -258,7 +261,7 @@ function createCommentArray(id) {
 function commentKeystroke(postUID) {
   let newText = `textArea${postUID}`;
   let date = $("#" + `date${postUID}`).text();
-  console.log(nexText);
+  console.log(newText);
   console.log(date);
 
   let commentToAdd = createCommentFromForm(postUID);
@@ -347,6 +350,7 @@ function createUser(userObject, idToHide, idToShow) {
     data: JSON.stringify(userObject),
     contentType: "application/json; charset=utf-8",
     success: function (data) {
+      console.log(data.payload)
       setToken(data.token);
       setUser(data.payload.user.user);
       loadUserMedia(idToHide, idToShow);
