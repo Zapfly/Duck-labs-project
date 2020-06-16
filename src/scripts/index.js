@@ -67,9 +67,9 @@ function setToken(_token) {
   token = _token;
 }
 
-function getToken() {
-  $.cookie(TOKEN_NAME);
-}
+// function getToken() {
+//   $.cookie(TOKEN_NAME);
+// }
 
 function hasToken() {
   if ($.cookie(TOKEN_NAME)) {
@@ -77,6 +77,12 @@ function hasToken() {
     return true;
   }
   return false;
+}
+
+function pressedLogOut() {
+  $.removeCookie(TOKEN_NAME);
+  $.removeCookie(user_name);
+  window.location.href = "index.html";
 }
 
 function inputHasSomeText(id) {
@@ -252,6 +258,8 @@ function createCommentArray(id) {
 function commentKeystroke(postUID) {
   let newText = `textArea${postUID}`;
   let date = $("#" + `date${postUID}`).text();
+  console.log(nexText);
+  console.log(date);
 
   let commentToAdd = createCommentFromForm(postUID);
   createCommentCard(commentToAdd);
