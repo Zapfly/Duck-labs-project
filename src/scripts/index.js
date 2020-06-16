@@ -1,8 +1,10 @@
-var TOKEN_NAME = "token";
+let TOKEN_NAME = "token";
 let token = "";
+let user
 $(document).ready(function () {
-  if (hasToken()) {
+  if (hasToken() && hasUser()) {
     loadUserMedia("user-area", "status-input");
+    show("logOut")
     updatePostsFromServer();
   }
 });
@@ -41,7 +43,23 @@ function enable(id) {
 
 function pressedLogOut() {
   $.removeCookie(TOKEN_NAME);
+  $.removeCookie(user_name);
   window.location.href = "index.html";
+}
+
+let user_name = "username";
+
+function setUser(_username) {
+  $.cookie(user_name, _username);
+  user = _username;
+}
+
+function hasUser() {
+  if ($.cookie(user_name)) {
+    user = $.cookie(user_name);
+    return true;
+  }
+  return false;
 }
 
 function setToken(_token) {
@@ -82,9 +100,9 @@ function addPostToPage(post) {
     let postHtml = `
 			<div class="post-card card" id="${post.uid}">
 				<div class='post-card-header'>
-					<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
-					<div> 
-						${post.author}
+					<img class="profile-thumbnail" src='https://robohash.org/${user}?set=set2&size=180x180'/>
+					<div class="post-author"> 
+						${post.author.toUpperCase()}
 						</br>
 						<div id='date${post.uid}'>${post.postDate}</div>
 					</div>
@@ -147,11 +165,9 @@ function getPostFromForm(
   id = String(new Date().getTime()),
   commentsArray = []
 ) {
-	console.log(inputTextId)
-  let authorName = "Anonymous";
+  
   let inputText;
   if (inputHasSomeText(inputTextId)) {
-    authorName = "Anonymous";
     inputText = getInputValue(inputTextId);
   } else if (
     $(`#${inputTextId}`).text() != "" &&
@@ -163,7 +179,7 @@ function getPostFromForm(
   }
   return {
     postText: inputText,
-    author: authorName,
+    author: user,
     postDate: inputDate,
     uid: id,
     comments: commentsArray,
@@ -172,14 +188,14 @@ function getPostFromForm(
 
 function createCommentFromForm(
   postId,
-  authorName = "Anonymous",
+  authorName = user,
   inputDate = todaysDateString(),
   id = String(new Date().getTime())
 ) {
   if (inputHasSomeText(`commentInput${postId}`)) {
     return {
       commentId: `${id}`,
-      avatar: `https://robohash.org/${id}?set=set2&size=180x180`,
+      avatar: `https://robohash.org/${authorName}?set=set2&size=180x180`,
       date: inputDate,
       author: authorName,
       text: getInputValue(`commentInput${postId}`),
@@ -189,22 +205,25 @@ function createCommentFromForm(
     console.log("post does not have text");
   }
 }
-let testComment = {
-  commentId: `12345`,
-  avatar: `https://robohash.org/12345?set=set2&size=180x180`,
-  date: "1991",
-  author: "Anonymouse",
-  text: "This is a test Comment",
-  parentId: `commentFeed12345`,
-};
+// let testComment = {
+//   commentId: `12345`,
+//   avatar: `https://robohash.org/12345?set=set2&size=180x180`,
+//   date: "1991",
+//   author: "Anonymous",
+//   text: "This is a test Comment",
+//   parentId: `commentFeed12345`,
+// };
 
 function createCommentCard(newComment) {
   let commentCard = `
   <div id='${newComment.commentId}' class='comment-card card'>
+    <div class="comment-header"> 
       <img id='img${newComment.commentId}' src='${newComment.avatar}' class='profile-thumbnail'/>
-      <div id='author${newComment.commentId}' class='comment-author'> ${newComment.author}</div>
-      </br>
-      <div id='date${newComment.commentId}' class='comment-date'> ${newComment.date} </div>
+      <div class="post-author"> 
+        <div id='author${newComment.commentId}' class='comment-author'> ${newComment.author.toUpperCase()}</div>
+        <div id='date${newComment.commentId}' class='comment-date'> ${newComment.date} </div>
+      </div>
+    </div>
     <div id='text${newComment.commentId}' class='comment-text'> ${newComment.text}</div>
   </div>
   `;
@@ -219,7 +238,7 @@ function createCommentArray(id) {
       let collectedId = String($(this).attr("id"));
       let arrayObj = {
         commentId: `${collectedId}`,
-        avatar: `https://robohash.org/${collectedId}?set=set2&size=180x180`,
+        avatar: $("#" + `img${collectedId}`).attr("src"),
         date: $("#" + `date${collectedId}`).text(),
         author: $("#" + `author${collectedId}`).text(),
         text: $("#" + `text${collectedId}`).text(),
@@ -305,6 +324,12 @@ function loadUserMedia(idToHide, idToShow) {
   switchVisibleElements(idToHide, idToShow);
 }
 
+function errorMessage (id, message){
+  $(`#${id}`).css('visibility', 'visible')
+
+  $(`#${id}`).html(`${message}`);
+
+}
 //---- server interaction
 
 function createUser(userObject, idToHide, idToShow) {
@@ -315,10 +340,17 @@ function createUser(userObject, idToHide, idToShow) {
     contentType: "application/json; charset=utf-8",
     success: function (data) {
       setToken(data.token);
-      window.location.href = "index.html";
+      setUser(data.payload.user.user);
+      loadUserMedia(idToHide, idToShow);
+      show("logOut");
+      updatePostsFromServer();
+     
     },
-    fail: function (data) {
-      console.log(data.errors);
+    error: function (err) {
+      let obj = jQuery.parseJSON( err.responseText );
+      console.log(err)
+      errorMessage('loginErrorMessage', obj.errors[0].msg)
+
     },
   });
 }
@@ -331,17 +363,19 @@ function userLogin(userLoginObject, idToHide, idToShow) {
     contentType: "application/json; charset=utf-8",
     success: function (data) {
       setToken(data.token);
+      setUser(data.user);
       loadUserMedia(idToHide, idToShow);
+      show("logOut");
       updatePostsFromServer();
     },
-    fail: function (err) {
-      console.log(err);
+    error: function (err) {
+      let obj = jQuery.parseJSON( err.responseText );
+      errorMessage('loginErrorMessage', obj.errors[0].msg)
     },
   });
 }
 
 function postPostsToServerAndUpdatePage(post) {
-  console.log(token);
   $.ajax({
     url: "/api/v1/addPost",
     type: "POST",
@@ -353,7 +387,7 @@ function postPostsToServerAndUpdatePage(post) {
     success: function () {
       updatePostsFromServer();
     },
-    fail: function (error) {
+    error: function (error) {
       console.log(error.message);
     },
   });
@@ -364,9 +398,7 @@ function updatePostsFromServer() {
     .done(function (posts) {
       updatePagePosts(posts);
     })
-    .fail(function (error) {
-      console.log(error.message);
-    });
+    
 }
 
 function clearPostsFromServer() {
@@ -380,7 +412,7 @@ function clearPostsFromServer() {
     success: function () {
       updatePostsFromServer();
     },
-    fail: function (error) {
+    error: function (error) {
       console.log(error.message);
     },
   });
@@ -398,7 +430,7 @@ function deleteFromServer(post) {
     success: function () {
       updatePostsFromServer();
     },
-    fail: function (error) {
+    error: function (error) {
       console.log(error);
     },
   });
@@ -413,7 +445,7 @@ function updateOnePost(post) {
     success: function () {
       updatePostsFromServer();
     },
-    fail: function (error) {
+    error: function (error) {
       console.log(error);
     },
   });

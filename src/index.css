@@ -1,7 +1,5 @@
-input {
-  border-radius: 10px;
-  border-color: lightgray;
-  padding: 2px;
+h3 {
+  margin-bottom: 0.5em;
 }
 
 textarea {
@@ -14,14 +12,6 @@ body {
   grid-template-columns: 1fr 2fr 1fr;
   background-color: #ecf3ff;
 }
-.under-construction {
-  background-image: url("./images/underconstruction.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-width: 30px;
-  opacity: 0.7;
-}
-
 button {
   background-color: #ecf3ff;
   border-color: lightgray;
@@ -32,15 +22,15 @@ button {
 }
 
 input {
-  border-radius: 5px;
   background-color: whitesmoke;
 }
+
 button:hover {
   cursor: pointer;
   background-color: rgb(64, 128, 240);
 }
-/*header and its contents*/
 
+/*header and its contents*/
 header {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -80,25 +70,34 @@ header {
 }
 
 /* Login user div */
+#loginErrorMessage {
+  visibility: hidden;
+  width: 94%;
+  border-style: solid;
+  border-color: red;
+  background-color: #ecf3ff;
+  color: red;
+  text-align: center;
+  padding: 1%;
+  margin-bottom: 1%;
+}
 
 #user-area {
   width: 98%;
   margin: 20% 2%;
   grid-column-start: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
 }
 .or-label {
   text-align: center;
-  width: 100%;
+  width: 80%;
 }
 .or-label:before,
 .or-label:after {
   content: "";
   display: inline-block;
-  width: 300px;
+  width: 40%;
   height: 1px;
   background: #000;
   left: 0;
@@ -107,17 +106,39 @@ header {
 }
 
 .user-input {
-  width: 80%;
-  margin-left: 10%;
+  width: 84%;
+}
+#loginUserContainer,
+#createUserContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;  
+  width: 100%;
+}
+#userAreaButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 100%;
 }
 
 #loginPageButton,
 #signUpPageButton {
-  width: 100%;
+  width: 80%;
+ } 
+
+#signUpPageButton2,
+#loginPageButton2,
+.or-lable {
+  width: 70%;
 }
+
+
 #loginButton,
 #signUpButton {
-  width: 84%;
+  width: 70%;
   margin-top: 10px;
   background-color: rgb(64, 128, 240);
 }
@@ -126,15 +147,15 @@ header {
 .create-user,
 .login-user {
   display: none;
-  padding: 10px;
 }
+
 /* Status input div*/
 #status-input {
   grid-column-start: 2;
-  margin-top: 20%;
+  margin-top: 2%;
 }
 #logOut {
-  position: fixed;
+  display: none;
   top: 4%;
   right: 10%;
 }
@@ -170,11 +191,12 @@ header {
 }
 
 #postButton {
+  grid-column-start: 1;
+  grid-column-end: 3;
   width: 40%;
 }
 
 /*Newsfeed and its cards*/
-
 #newsFeed {
   display: grid;
   grid-row-start: 4;
@@ -185,10 +207,12 @@ header {
   display: grid;
   grid-template-columns: 5fr 1fr;
   min-height: 2rem;
-  margin: 3px;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
-.post-card-header {
+.post-card-header,
+.comment-header {
   color: #4267b2;
   font-weight: bold;
   display: flex;
@@ -230,7 +254,7 @@ header {
 }
 .comment-button {
   width: 40%;
-  margin-right: 2%;
+  margin-right: 1%;
   margin-bottom: 5%;
   justify-content: center;
   display: grid;
@@ -272,6 +296,9 @@ header {
 }
 .comment-card-container {
   width: 96%;
+}
+.post-author{
+  font-size: 80%;
 }
 
 .show {

@@ -17,37 +17,40 @@
     <header>
         <img class="fakebook-logo" src="./FAKEbook.png" alt="Fakebook Logo" />
         <span id="title">Fakebook</span>
+        <button id="hidde" onClick="pressedLogOut()">Log Out</button>
     </header>
 
 
-    <div id='user-area'>
+    <div id='user-area' class="card">
         <h3 >Choose Your Account</h3>
         <div id="userAreaButtons">
             <button class=" card" id="loginPageButton" onclick="switchVisibleElements('userAreaButtons', 'loginUser')">Log in</button>
             <button class="card" id="signUpPageButton" onclick="switchVisibleElements('userAreaButtons','createUser')">Sign Up</button>
         </div>
       
-        <div class="login-user card" id="loginUser" > 
-            <div id="loginErrorMessage"></div>
-
-            <input class="user-input card" id='loginEmailInput' type="text" placeholder="Email" value="example@gmail.com" /><br/>
-            <input class="user-input card" id='loginPassInput'  type="text" placeholder="Password" value="123456"/><br/>
-            <input class="user-input card" id="loginButton" type="button" value="Log In" onClick="loginButtonPressed()"/>    
-            <br>
-            <div class="or-label"><span>or</span></div>
-            <div id="signupErrorMessage"></div>
-            <button class="card" id="signUpPageButton" onclick="switchVisibleElements('loginUser','createUser')">Sign Up</button>
+        <div id="loginErrorMessage">A</div>
         
+        <div class="login-user" id="loginUser" > 
+            <div id='loginUserContainer'>
+                <input class="card user-input" id='loginEmailInput' type="text" placeholder="Email"  />
+                <input class="card user-input" id='loginPassInput' type="password" placeholder="Password"/>
+                <input class="card user-input" id="loginButton" type="button" value="Log In" onClick="loginButtonPressed()"/>    
+                <div class="or-label"><span>or</span></div>
+                <div id="signupErrorMessage"></div>
+                <button class="card user-input" id="signUpPageButton2" onclick="switchVisibleElements('loginUser','createUser')">Sign Up</button>
+            </div>
         </div>
-        <div class="create-user card" id="createUser">
-            <input class="card user-input" id='createUserInput'  type="text" placeholder="Username" value="testName"/><br/>
-            <input class="card user-input" id='createPassInput'  type="text" placeholder="Password" value="testPassword"/><br/>
-            <input class="card user-input" id='createEmailInput' type="text" placeholder="Email" value="testEmail@gmail.com"/><br/>
-            <input class="card user-input" id='signUpButton' type="button" value="Sign Up" onclick="createUserButtonPressed()"/>
-            <br>
-            <div class="or-label"><span>or</span></div>
-            <button class="button-with-image card" id="loginPageButton" onclick="switchVisibleElements('createUser', 'loginUser')">Log in</button>
-        
+        <div class="create-user" id="createUser">
+            <div id='createUserContainer'>
+
+                <input class="card user-input" id='createUserInput'  type="text" placeholder="Username" />
+                <input class="card user-input" id='createPassInput'  type="password" placeholder="Password" />
+                <input class="card user-input" id='createEmailInput' type="text" placeholder="Email" />
+                <input class="card user-input" id='signUpButton' type="button" value="Sign Up" onclick="createUserButtonPressed()"/>
+                <div class="or-label"><span>or</span></div>
+                <button class="card user-input" id="loginPageButton2" onclick="switchVisibleElements('createUser', 'loginUser')">Log in</button>
+                
+            </div>
         </div>   
     </div>
 
@@ -61,7 +64,6 @@
                 <button id="postButton" onClick="postButtonPressed('statusInputField')">&#9993; Post</button>
             </div>
         </div>         
-        <button id="logOut" onClick="pressedLogOut()">Log Out</button>
     </div>
     <div id="newsFeed">
         <!-- posts will go here-->

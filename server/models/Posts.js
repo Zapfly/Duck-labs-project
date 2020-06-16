@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  // user: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: 'users'
-  // },
   postText: {
     type: String,
     required: true,
@@ -21,25 +17,12 @@ const PostSchema = new Schema({
   uid: {
     type: String,
   },
-
-  // avatar: {
-  //     type: String
-  // },
-
-  // likes: [
-  //     {
-  //         user: {
-  //             type: Schema.Types.ObjectId,
-  //             ref: 'users'
-  //         }
-  //     }
-  // ],
   comments: [
       {
-          // user: {
-          //     type: Schema.Types.ObjectId,
-          //     ref: 'users'
-          // },
+          user: {
+              type: Schema.Types.ObjectId,
+              ref: 'users'
+          },
           commentId: {
             type:String,
             required: true

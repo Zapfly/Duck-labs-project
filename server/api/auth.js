@@ -10,7 +10,7 @@ async function basicAuth(request, response, next) {
   const user = await User.findOne({ email });
   if (!user) {
     return response.status(400).json({
-      errors: [{ msg: "Authentication failed: Invalid username or password." }],
+      errors: [{ msg: "Invalid username or password." }],
     });
   } else {
     const isMatch = await bcrypt.compare(password, user.password);
@@ -19,7 +19,7 @@ async function basicAuth(request, response, next) {
       return response.status(400).json({
         errors: [
           {
-            msg: "Authentication failed: Invalid username or password.",
+            msg: "Invalid username or password.",
           },
         ],
       });

@@ -41,7 +41,7 @@ const setupV1Routes = (apiRouter) => {
 
   async function updatePost(request, response) {
     try {
-      const post = await Post.find({ uid: request.body.uid }).update({
+      const post = await Post.find({ uid: request.body.uid }).updateOne({
         postText: request.body.postText,
         author: request.body.author,
         postDate: request.body.postDate,
