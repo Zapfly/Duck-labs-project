@@ -106,7 +106,7 @@ function addPostToPage(post) {
     let postHtml = `
 			<div class="post-card card" id="${post.uid}">
 				<div class='post-card-header'>
-					<img class="profile-thumbnail" src='https://robohash.org/${user}?set=set2&size=180x180'/>
+					<img class="profile-thumbnail" src='https://robohash.org/${post.uid}?set=set2&size=180x180'/>
 					<div class="post-author"> 
 						${post.author.toUpperCase()}
 						</br>
@@ -185,7 +185,7 @@ function getPostFromForm(
   }
   return {
     postText: inputText,
-    author: user,
+    author: "Anonymous",
     postDate: inputDate,
     uid: id,
     comments: commentsArray,
@@ -194,14 +194,14 @@ function getPostFromForm(
 
 function createCommentFromForm(
   postId,
-  authorName = user,
+  authorName = "Anonymous",
   inputDate = todaysDateString(),
   id = String(new Date().getTime())
 ) {
   if (inputHasSomeText(`commentInput${postId}`)) {
     return {
       commentId: `${id}`,
-      avatar: `https://robohash.org/${authorName}?set=set2&size=180x180`,
+      avatar: `https://robohash.org/${postId}?set=set2&size=180x180`,
       date: inputDate,
       author: authorName,
       text: getInputValue(`commentInput${postId}`),
@@ -258,7 +258,7 @@ function createCommentArray(id) {
 function commentKeystroke(postUID) {
   let newText = `textArea${postUID}`;
   let date = $("#" + `date${postUID}`).text();
-  console.log(nexText);
+  console.log(newText);
   console.log(date);
 
   let commentToAdd = createCommentFromForm(postUID);
